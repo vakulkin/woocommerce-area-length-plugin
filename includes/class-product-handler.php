@@ -7,7 +7,7 @@ class WALP_Product_Handler {
 	public function __construct() {
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_custom_fields' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_custom_fields' ) );
-		add_action( 'woocommerce_single_product_summary', array( $this, 'display_input_fields' ), 15 );
+        add_action('woocommerce_before_add_to_cart_form', array($this, 'display_input_fields'));
 		add_action( 'woocommerce_before_add_to_cart_button', array( $this, 'display_hidden_fields' ), 5 );
 		add_action( 'woocommerce_before_add_to_cart_quantity', array( $this, 'hide_standard_quantity' ) );
 		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'modify_add_to_cart_button' ) );
@@ -90,7 +90,6 @@ class WALP_Product_Handler {
 		global $product;
 
 		$product_type = get_post_meta( $product->get_id(), '_walp_product_type', true );
-		$meters_per_box = get_post_meta( $product->get_id(), '_walp_meters_per_box', true );
 
 		if ( $product_type === 'area' || $product_type === 'length' ) {
 			echo '<div class="walp-input-fields">';
