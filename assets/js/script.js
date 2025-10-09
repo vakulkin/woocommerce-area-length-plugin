@@ -84,14 +84,6 @@ var WALPCalculator = (function() {
             return utils.roundTo2(boxes * this.getMetersPerBox());
         },
 
-        calculateBoxesFromLength: function() {
-            var length = utils.getInputValue(config.selectors.length);
-            if (length <= 0) return 0;
-
-            var totalLength = utils.roundTo2(length * this.getMarginMultiplier());
-            return this.calculateBoxesFromMeters(totalLength);
-        },
-
         clampQty: function(qty) {
             var $qtyInput = jQuery(config.selectors.qtyInput);
             var minQty = parseInt($qtyInput.attr('min')) || config.defaults.minQty;
@@ -231,7 +223,8 @@ var WALPCalculator = (function() {
                     return;
                 }
 
-                var boxes = calculator.calculateBoxesFromLength() || minQty;
+                var totalLength = length;
+                var boxes = calculator.calculateBoxesFromMeters(totalLength) || minQty;
                 ui.updateQuantityFields(boxes, 0, productType);
             } 
             else if (triggeredBy === 'boxes') {
@@ -240,6 +233,8 @@ var WALPCalculator = (function() {
                     boxes = minQty;
                 }
                 jQuery(config.selectors.calculatedQty).val(boxes);
+                var totalLength = boxes * calculator.getMetersPerBox();
+                jQuery(config.selectors.length).val(totalLength > 0 ? utils.roundTo2(totalLength) : '');
                 ui.updateQuantityFields(boxes, 0, productType);
             }
         },

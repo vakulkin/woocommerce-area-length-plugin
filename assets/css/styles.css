@@ -51,9 +51,9 @@
     margin-bottom: 0 !important;
 }
 
-/* Dimensions Row: Always 3 columns on desktop for length, width, margin */
+/* Dimensions Row: Auto-fit columns to utilize available space */
 .walp-dimensions-row {
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
 }
 
 /* Mobile: Single column */
@@ -76,13 +76,10 @@
     }
 }
 
-/* Desktop: Flexible columns based on content, but dimensions always 3 columns */
+/* Desktop: Flexible columns based on content */
 @media (min-width: 768px) {
     .walp-row {
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
-    }
-    .walp-dimensions-row {
-        grid-template-columns: repeat(3, 1fr) !important;
     }
 }
 
