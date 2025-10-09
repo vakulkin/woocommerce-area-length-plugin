@@ -107,7 +107,7 @@ var WALPCalculator = (function() {
                 totalValue = utils.formatMeasurement(area, 'm²');
             } else if (productType === 'length' && boxes > 0) {
                 var totalLength = utils.roundTo2(boxes * calculator.getMetersPerBox());
-                totalValue = utils.formatMeasurement(totalLength, 'm');
+                totalValue = utils.formatMeasurement(totalLength, 'mb');
             }
 
             // Calculate final price
