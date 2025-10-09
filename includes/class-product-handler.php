@@ -157,7 +157,7 @@ class WALP_Product_Handler
             echo '<div class="walp-stats">';
 
             $this->render_stat(__('Razem:', 'woocommerce-area-length-plugin'), 'walp_total_value');
-            $this->render_stat(__('Potrzebne opakowania:', 'woocommerce-area-length-plugin'), 'walp_boxes_needed');
+            $this->render_stat(__('Opakowania:', 'woocommerce-area-length-plugin'), 'walp_boxes_needed');
 
             $this->render_stat(__('Cena końcowa:', 'woocommerce-area-length-plugin'), 'walp_final_price');
 
