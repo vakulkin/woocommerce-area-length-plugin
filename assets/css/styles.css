@@ -1,0 +1,528 @@
+/* ============================================
+   Modern WALP Calculator Styles (Vercel-inspired)
+   Mobile-first responsive design
+   ============================================ */
+
+/* Reset and Base Styles with !important to override theme */
+.walp-input-fields,
+.walp-input-fields *,
+.walp-calculated-fields,
+.walp-calculated-fields *,
+.walp-summary,
+.walp-summary *,
+.walp-row,
+.walp-row *,
+.walp-stats,
+.walp-stats *,
+.walp-field-group,
+.walp-field-group *,
+.walp-stat-group,
+.walp-stat-group *,
+.walp-input-group,
+.walp-input-group *,
+.walp-stat {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Main Container */
+.walp-input-fields {
+    margin-bottom: 24px !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Section Wrapper for Rows */
+.walp-section {
+    background: #fff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Input Row Layout */
+.walp-row {
+    display: grid !important;
+    gap: 16px !important;
+    margin-bottom: 0 !important;
+}
+
+/* Dimensions Row: Always 3 columns on desktop for length, width, margin */
+.walp-dimensions-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+/* Mobile: Single column */
+@media (max-width: 640px) {
+    .walp-row {
+        grid-template-columns: 1fr !important;
+    }
+    .walp-dimensions-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Tablet: Two columns */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .walp-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .walp-dimensions-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Desktop: Flexible columns based on content, but dimensions always 3 columns */
+@media (min-width: 768px) {
+    .walp-row {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    }
+    .walp-dimensions-row {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Field Group */
+.walp-field-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+}
+
+.walp-field-group label {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #525252 !important;
+    line-height: 1.4 !important;
+    transition: color 0.2s ease !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.walp-field-group:focus-within label {
+    color: #000 !important;
+}
+
+/* Strong Input Overrides for Theme */
+.walp-field-group input[type="number"],
+.walp-input-group input[type="number"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 44px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+    line-height: normal !important;
+    color: #171717 !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    border: none !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-align: center !important;
+    font-weight: 500 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+    margin: 0 !important;
+    vertical-align: middle !important;
+}
+
+.walp-field-group input[type="number"]:focus,
+.walp-input-group input[type="number"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Select Dropdown Override */
+.walp-field-group select {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 44px !important;
+    padding: 0 12px !important;
+    padding-right: 32px !important;
+    font-size: 14px !important;
+    line-height: normal !important;
+    color: #171717 !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    outline: none !important;
+    box-shadow: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+    margin: 0 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23525252' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+}
+
+.walp-field-group select:hover {
+    border-color: #a3a3a3 !important;
+}
+
+.walp-field-group select:focus {
+    border-color: #000 !important;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Input Group with +/- Buttons */
+.walp-input-group {
+    display: flex !important;
+    align-items: stretch !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    overflow: hidden !important;
+    height: 44px !important;
+}
+
+.walp-input-group:hover {
+    border-color: #a3a3a3 !important;
+}
+
+.walp-input-group:focus-within {
+    border-color: #000 !important;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.walp-input-group input {
+    flex: 1 !important;
+    height: 44px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+    color: #171717 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-align: center !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+}
+
+.walp-input-group button {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #525252 !important;
+    background: #fafafa !important;
+    background-color: #fafafa !important;
+    border: none !important;
+    border-radius: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 44px !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.walp-input-group button:hover {
+    background: #f5f5f5 !important;
+    background-color: #f5f5f5 !important;
+    color: #000 !important;
+}
+
+.walp-input-group button:active {
+    background: #e5e5e5 !important;
+    background-color: #e5e5e5 !important;
+    transform: scale(0.95) !important;
+}
+
+.walp-decrement {
+    border-right: 1px solid #e5e5e5 !important;
+}
+
+.walp-increment {
+    border-left: 1px solid #e5e5e5 !important;
+}
+
+/* Remove number input spinners */
+.walp-input-group input[type="number"]::-webkit-outer-spin-button,
+.walp-input-group input[type="number"]::-webkit-inner-spin-button,
+.walp-field-group input[type="number"]::-webkit-outer-spin-button,
+.walp-field-group input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
+}
+
+.walp-input-group input[type="number"],
+.walp-field-group input[type="number"] {
+    appearance: textfield !important;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: textfield !important;
+}
+
+/* Calculated Fields Section */
+.walp-calculated-fields {
+    margin-top: 0 !important;
+    margin-bottom: 16px !important;
+    padding: 0 !important;
+}
+
+/* Summary Section */
+.walp-summary {
+    margin-top: 16px !important;
+    padding: 20px !important;
+    background: linear-gradient(to bottom, #fafafa, #fff) !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.walp-summary h4 {
+    margin-bottom: 16px !important;
+    padding: 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.4 !important;
+}
+
+/* Stats Grid - 3 Columns */
+.walp-stats {
+    display: grid !important;
+    gap: 12px !important;
+}
+
+/* Mobile: Single column */
+@media (max-width: 640px) {
+    .walp-stats {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 641px) and (max-width: 899px) {
+    .walp-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 900px) {
+    .walp-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Stat Card */
+.walp-stat-group {
+    display: flex !important;
+    background: #fff !important;
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 10px !important;
+    padding: 16px !important;
+    transition: all 0.2s ease !important;
+    min-width: 0 !important;
+}
+
+.walp-stat-group:hover {
+    border-color: #d4d4d4 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    transform: translateY(-1px) !important;
+}
+
+.walp-stat {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.walp-stat-label {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: #737373 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.walp-stat-value {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    color: #171717 !important;
+    line-height: 1.3 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Mobile: Smaller font size */
+@media (max-width: 640px) {
+    .walp-stat-value {
+        font-size: 18px !important;
+    }
+}
+
+/* Stock Info Styling */
+.walp-stat-value span[style*="color:orange"] {
+    color: #f97316 !important;
+    font-weight: 700 !important;
+}
+
+.walp-stat-value span[style*="color: #666"] {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    font-weight: 500 !important;
+    color: #737373 !important;
+    display: block !important;
+    margin-top: 4px !important;
+    padding: 0 !important;
+}
+
+/* Loading State */
+.walp-input-fields.loading {
+    opacity: 0.6 !important;
+    pointer-events: none !important;
+}
+
+/* Focus Visible for Accessibility */
+.walp-input-group button:focus-visible {
+    outline: 2px solid #000 !important;
+    outline-offset: 2px !important;
+}
+
+.walp-field-group select:focus-visible {
+    outline: 2px solid #000 !important;
+    outline-offset: 2px !important;
+}
+
+/* Dark Mode Support (if theme supports it) */
+@media (prefers-color-scheme: dark) {
+    .walp-section {
+        background: #171717 !important;
+        border-color: #404040 !important;
+    }
+    
+    .walp-field-group label {
+        color: #a3a3a3 !important;
+    }
+    
+    .walp-field-group:focus-within label {
+        color: #fff !important;
+    }
+    
+    .walp-input-group,
+    .walp-field-group select,
+    .walp-field-group input[type="number"],
+    .walp-input-group input[type="number"] {
+        background: #262626 !important;
+        background-color: #262626 !important;
+        border-color: #404040 !important;
+        color: #e5e5e5 !important;
+    }
+    
+    .walp-input-group:hover,
+    .walp-field-group select:hover {
+        border-color: #525252 !important;
+    }
+    
+    .walp-input-group:focus-within,
+    .walp-field-group select:focus {
+        border-color: #fff !important;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .walp-input-group button {
+        background: #1a1a1a !important;
+        background-color: #1a1a1a !important;
+        color: #a3a3a3 !important;
+        border-color: #404040 !important;
+    }
+    
+    .walp-input-group button:hover {
+        background: #404040 !important;
+        background-color: #404040 !important;
+        color: #fff !important;
+    }
+    
+    .walp-summary {
+        background: linear-gradient(to bottom, #171717, #0a0a0a) !important;
+        border-color: #404040 !important;
+    }
+    
+    .walp-summary h4 {
+        color: #e5e5e5 !important;
+    }
+    
+    .walp-stat-group {
+        background: #171717 !important;
+        border-color: #404040 !important;
+    }
+    
+    .walp-stat-group:hover {
+        border-color: #525252 !important;
+    }
+    
+    .walp-stat-label {
+        color: #737373 !important;
+    }
+    
+    .walp-stat-value {
+        color: #e5e5e5 !important;
+    }
+    
+    .walp-stat-value span[style*="color: #666"] {
+        color: #a3a3a3 !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .walp-input-group button {
+        display: none !important;
+    }
+    
+    .walp-summary,
+    .walp-section {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+    }
+}
+
+/* Smooth Animations */
+@media (prefers-reduced-motion: no-preference) {
+    .walp-stat-value,
+    .walp-stat-label {
+        transition: color 0.2s ease !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .walp-input-group,
+    .walp-field-group select,
+    .walp-stat-group,
+    .walp-section {
+        border-width: 2px !important;
+    }
+}
