@@ -187,8 +187,7 @@ class WALP_Product_Handler {
 
 		if ( $product_type === 'area' || $product_type === 'length' ) {
 			echo '<style>
-				.quantity,
-				.qty {
+				.summary entry-summary .quantity {
 					display: none !important;
 				}
 			</style>';
