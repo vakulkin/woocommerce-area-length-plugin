@@ -13,6 +13,23 @@ class WALP_Product_Handler
         add_action('woocommerce_before_add_to_cart_button', array( $this, 'display_hidden_fields' ), 5);
         add_action('woocommerce_before_add_to_cart_quantity', array( $this, 'hide_standard_quantity' ));
         add_action('woocommerce_after_add_to_cart_button', array( $this, 'modify_add_to_cart_button' ));
+        add_filter('woocommerce_get_price_suffix', array($this, 'add_price_suffix'), 10, 2);
+    }
+
+    /**
+     * Get product type meta
+     */
+    private function get_product_type_meta($product_id)
+    {
+        return get_post_meta($product_id, '_walp_product_type', true);
+    }
+
+    /**
+     * Get meters per box meta
+     */
+    private function get_meters_per_box_meta($product_id)
+    {
+        return floatval(get_post_meta($product_id, '_walp_meters_per_box', true));
     }
 
     /**
@@ -96,9 +113,11 @@ class WALP_Product_Handler
     {
         global $product;
 
-        $product_type = get_post_meta($product->get_id(), '_walp_product_type', true);
+        $product_id = $product->get_id();
+        $product_type = $this->get_product_type_meta($product_id);
+        $meters_per_box = $this->get_meters_per_box_meta($product_id);
 
-        if ($product_type === 'area' || $product_type === 'length') {
+        if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
             echo '<div class="walp-input-fields">';
 
             // Dimensions input section with wrapper
@@ -111,7 +130,8 @@ class WALP_Product_Handler
                 $this->render_input_field('walp_width', __('Szerokość (metry)', 'woocommerce-area-length-plugin'));
             } else {
                 $this->render_input_field('walp_length', __('Długość (metry)', 'woocommerce-area-length-plugin'));
-                $this->render_input_field('walp_calculated_qty', __('Potrzebne opakowania', 'woocommerce-area-length-plugin'), true);
+                $qty_label = __('Potrzebne sztuki', 'woocommerce-area-length-plugin');
+                $this->render_input_field('walp_calculated_qty', $qty_label, true);
             }
 
             // Safety margin dropdown only for area
@@ -157,7 +177,8 @@ class WALP_Product_Handler
             echo '<div class="walp-stats">';
 
             $this->render_stat(__('Razem:', 'woocommerce-area-length-plugin'), 'walp_total_value');
-            $this->render_stat(__('Opakowania:', 'woocommerce-area-length-plugin'), 'walp_boxes_needed');
+            $boxes_label = $product_type === 'area' ? __('Opakowania:', 'woocommerce-area-length-plugin') : __('Sztuki:', 'woocommerce-area-length-plugin');
+            $this->render_stat($boxes_label, 'walp_boxes_needed');
 
             $this->render_stat(__('Cena końcowa:', 'woocommerce-area-length-plugin'), 'walp_final_price');
 
@@ -175,10 +196,11 @@ class WALP_Product_Handler
     {
         global $product;
 
-        $product_type = get_post_meta($product->get_id(), '_walp_product_type', true);
-        $meters_per_box = get_post_meta($product->get_id(), '_walp_meters_per_box', true);
+        $product_id = $product->get_id();
+        $product_type = $this->get_product_type_meta($product_id);
+        $meters_per_box = $this->get_meters_per_box_meta($product_id);
 
-        if ($product_type === 'area' || $product_type === 'length') {
+        if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
             // Hidden fields
             echo '<input type="hidden" name="walp_qty" id="walp_qty">';
             echo '<input type="hidden" name="walp_product_type" id="walp_product_type" value="' . esc_attr($product_type) . '">';
@@ -194,9 +216,11 @@ class WALP_Product_Handler
     {
         global $product;
 
-        $product_type = get_post_meta($product->get_id(), '_walp_product_type', true);
+        $product_id = $product->get_id();
+        $product_type = $this->get_product_type_meta($product_id);
+        $meters_per_box = $this->get_meters_per_box_meta($product_id);
 
-        if ($product_type === 'area' || $product_type === 'length') {
+        if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
             echo '<style>
                 .summary-woodmart-layout-product .quantity,
 				.summary.entry-summary .quantity {
@@ -213,9 +237,11 @@ class WALP_Product_Handler
     {
         global $product;
 
-        $product_type = get_post_meta($product->get_id(), '_walp_product_type', true);
+        $product_id = $product->get_id();
+        $product_type = $this->get_product_type_meta($product_id);
+        $meters_per_box = $this->get_meters_per_box_meta($product_id);
 
-        if ($product_type === 'area' || $product_type === 'length') {
+        if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
             echo '<style>
 				.single_add_to_cart_button {
 					width: 100% !important;
@@ -242,5 +268,24 @@ class WALP_Product_Handler
     public static function get_meters_per_box($product_id)
     {
         return floatval(get_post_meta($product_id, '_walp_meters_per_box', true));
+    }
+
+    /**
+     * Add price suffix based on product type
+     */
+    public function add_price_suffix($suffix, $product)
+    {
+        $product_type = $this->get_product_type_meta($product->get_id());
+        $meters_per_box = $this->get_meters_per_box_meta($product->get_id());
+
+        if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
+            if ($product_type === 'area') {
+                $suffix .= ' / ' . __('opakowanie', 'woocommerce-area-length-plugin');
+            } else {
+                $suffix .= ' / ' . __('sztuka', 'woocommerce-area-length-plugin');
+            }
+        }
+
+        return $suffix;
     }
 }

@@ -156,6 +156,10 @@ var WALPCalculator = (function() {
         updateCalculations: function(triggeredBy) {
             var productType = jQuery(config.selectors.productType).val();
 
+            if (calculator.getMetersPerBox() <= 0) {
+                return;
+            }
+
             if (productType === 'area') {
                 this._handleAreaCalculations(triggeredBy, productType);
             } else if (productType === 'length') {
