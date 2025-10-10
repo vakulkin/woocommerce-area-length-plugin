@@ -11,7 +11,8 @@ class WALP_Product_Handler {
 		add_action( 'woocommerce_before_add_to_cart_button', array( $this, 'display_hidden_fields' ), 5 );
 		add_action( 'woocommerce_before_add_to_cart_quantity', array( $this, 'hide_standard_quantity' ) );
 		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'modify_add_to_cart_button' ) );
-		add_filter( 'woocommerce_get_price_suffix', array( $this, 'add_price_suffix' ), 10, 2 );
+		        add_filter('woocommerce_get_price_suffix', array($this, 'add_price_suffix'), 10, 2);
+        add_filter('woocommerce_get_price_html', array($this, 'modify_price_html'), 10, 2);
 	}
 
 	/**
@@ -264,13 +265,26 @@ class WALP_Product_Handler {
 		$meters_per_box = $this->get_meters_per_box_meta( $product->get_id() );
 
 		if ( ( $product_type === 'area' || $product_type === 'length' ) && $meters_per_box > 0 ) {
-			if ( $product_type === 'area' ) {
-				$suffix .= ' / ' . __( 'opakowanie', 'woocommerce-area-length-plugin' );
-			} else {
+			if ( $product_type === 'length' ) {
 				$suffix .= ' / ' . __( 'sztuka', 'woocommerce-area-length-plugin' );
 			}
 		}
 
 		return $suffix;
+	}
+
+	/**
+	 * Modify price HTML for area products to show price per m²
+	 */
+	public function modify_price_html( $price_html, $product ) {
+		$product_type = $this->get_product_type_meta( $product->get_id() );
+		$meters_per_box = $this->get_meters_per_box_meta( $product->get_id() );
+
+		if ( $product_type === 'area' && $meters_per_box > 0 ) {
+			$price_per_m2 = $product->get_price() / $meters_per_box;
+			$price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . number_format( $price_per_m2, 2, ',', ' ' ) . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>/m²</bdi></span>';
+		}
+
+		return $price_html;
 	}
 }
