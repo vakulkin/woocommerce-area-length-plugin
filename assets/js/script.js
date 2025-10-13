@@ -144,13 +144,12 @@ var WALPCalculator = (function () {
             jQuery(config.selectors.calculatedQty).val(boxes > 0 ? boxes : '');
             jQuery(config.selectors.qty).val(clampedQty > 0 ? clampedQty : '');
             jQuery(config.selectors.qtyInput).val(clampedQty > 0 ? clampedQty : config.defaults.minQty);
-            this.updateSummar(boxes, clampedQty, productType);
+            this.updateSummary(boxes, clampedQty, productType);
         },
 
         handleEmptyCalculation: function (productType) {
             var $qtyInput = jQuery(config.selectors.qtyInput);
             var minQty = parseInt($qtyInput.attr('min')) || config.defaults.minQty;
-            var area = productType === 'area' ? calculator.calculateAreaFromBoxes(minQty) : 0;
             this.updateSummary(minQty, minQty, productType);
         }
     };
