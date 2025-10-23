@@ -77,7 +77,12 @@ var WALPCalculator = (function () {
             if (meters <= 0) return 0;
 
             var metersPerBox = this.getMetersPerBox();
-            return metersPerBox > 0 ? Math.ceil(meters / metersPerBox) : 0;
+            if (metersPerBox <= 0) return 0;
+
+            var ratio = meters / metersPerBox;
+            // Round to 2 decimal places since only 2 decimals are valuable
+            ratio = utils.roundTo2(ratio);
+            return Math.ceil(ratio);
         },
 
         calculateAreaFromBoxes: function (boxes) {
