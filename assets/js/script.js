@@ -8,7 +8,7 @@ var WALPCalculator = (function () {
             length: '#walp_length',
             width: '#walp_width',
             margin: '#walp_margin',
-            calculatedArea: '#walp_calculated_area',
+            calculatedValue: '#walp_calculated_value',
             calculatedQty: '#walp_calculated_qty',
             metersPerBox: '#walp_meters_per_box',
             productType: '#walp_product_type',
@@ -123,14 +123,15 @@ var WALPCalculator = (function () {
             }
 
             // Check stock constraints
-            if (clampedQty !== boxes && boxes > 0) {
-                var stockInfo = '';
+            if (boxes > 0) {
                 if (clampedQty > boxes) {
-                    stockInfo = 'co najmniej: ' + clampedQty;
-                } else {
-                    stockInfo = '<span style="color:orange">' + clampedQty + '</span> z ' + boxes + ' na stanie';
+                    var stockInfo = 'co najmniej: ' + clampedQty;
+                    boxesNeeded += '<br><span class="walp-stock-info">' + stockInfo + '</span>';
+                } else if (clampedQty < boxes) {
+                    var stockInfo = 'mamy <span class="walp-stock-warning">' + clampedQty + '</span> z ' + boxes + ' na stanie';
+                    boxesNeeded = '<span class="walp-stock-info">' + stockInfo + '</span>';
                 }
-                boxesNeeded += '<br><span style="font-size: 0.9em; line-height: 1.3; color: #666;">' + stockInfo + '</span>';
+                // If clampedQty === boxes, boxesNeeded remains as boxes
             }
 
             // Update DOM
@@ -184,19 +185,19 @@ var WALPCalculator = (function () {
                 }
 
                 var area = calculator.calculateAreaFromDimensions();
-                jQuery(config.selectors.calculatedArea).val(area > 0 ? area : '');
+                jQuery(config.selectors.calculatedValue).val(area > 0 ? area : '');
                 var boxes = calculator.calculateBoxesFromMeters(area) || minQty;
 
                 if (boxes === 0 || !area) {
                     boxes = minQty;
                     area = calculator.calculateAreaFromBoxes(boxes);
-                    jQuery(config.selectors.calculatedArea).val(area > 0 ? area.toFixed(2) : '');
+                    jQuery(config.selectors.calculatedValue).val(area > 0 ? area.toFixed(2) : '');
                 }
 
                 ui.updateQuantityFields(boxes, area, productType);
             }
             else if (triggeredBy === 'area') {
-                var area = utils.getInputValue(config.selectors.calculatedArea);
+                var area = utils.getInputValue(config.selectors.calculatedValue);
 
                 if (area <= 0) {
                     ui.handleEmptyCalculation(productType);
@@ -213,7 +214,7 @@ var WALPCalculator = (function () {
                 }
                 jQuery(config.selectors.calculatedQty).val(boxes);
                 var area = calculator.calculateAreaFromBoxes(boxes);
-                jQuery(config.selectors.calculatedArea).val(area > 0 ? area : '');
+                jQuery(config.selectors.calculatedValue).val(area > 0 ? area : '');
                 ui.updateQuantityFields(boxes, area, productType);
             }
         },
@@ -222,8 +223,8 @@ var WALPCalculator = (function () {
             var $qtyInput = jQuery(config.selectors.qtyInput);
             var minQty = parseInt($qtyInput.attr('min')) || config.defaults.minQty;
 
-            if (triggeredBy === 'dimensions') {
-                var length = utils.getInputValue(config.selectors.length);
+            if (triggeredBy === 'area') {
+                var length = utils.getInputValue(config.selectors.calculatedValue);
 
                 if (length <= 0) {
                     ui.handleEmptyCalculation(productType);
@@ -241,7 +242,7 @@ var WALPCalculator = (function () {
                 }
                 jQuery(config.selectors.calculatedQty).val(boxes);
                 var totalLength = boxes * calculator.getMetersPerBox();
-                jQuery(config.selectors.length).val(totalLength > 0 ? utils.roundTo2(totalLength) : '');
+                jQuery(config.selectors.calculatedValue).val(totalLength > 0 ? utils.roundTo2(totalLength) : '');
                 ui.updateQuantityFields(boxes, 0, productType);
             }
         },
@@ -249,10 +250,16 @@ var WALPCalculator = (function () {
         adjustInputValue: function (input, increment) {
             var current = parseFloat(input.val()) || 0;
             var min = parseFloat(input.attr('min')) || 0;
-            var newValue = utils.roundTo2(current + (increment ? 1 : -1));
+            var step = 1;
+
+            if (input.attr('id') === 'walp_calculated_value') {
+                step = calculator.getMetersPerBox() || 1;
+            }
+
+            var newValue = utils.roundTo2(current + (increment ? step : -step));
 
             if (!increment && newValue < min) {
-                return;
+                newValue = min;
             }
 
             input.val(newValue).trigger('input');
@@ -278,7 +285,7 @@ jQuery(document).ready(function ($) {
         WALP.engine.updateCalculations('dimensions');
     });
 
-    $('#walp_calculated_area').on('input change', function () {
+    $('#walp_calculated_value').on('input change', function () {
         WALP.engine.updateCalculations('area');
     });
 
@@ -304,5 +311,10 @@ jQuery(document).ready(function ($) {
 
     // Trigger calculation based on boxes to show initial stats
     WALP.engine.updateCalculations('boxes');
-    $('input.qty').attr('step', '1');
+
+    // Collapsible section toggle
+    $('.walp-section-header').on('click', function() {
+        var $section = $(this).closest('.walp-section-collapsible');
+        $section.toggleClass('expanded');
+    });
 });

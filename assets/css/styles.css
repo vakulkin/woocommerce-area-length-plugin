@@ -4,10 +4,20 @@
    ============================================ */
 
 /* Reset and Base Styles with !important to override theme */
-.walp-input-fields,
-.walp-input-fields *,
-.walp-calculated-fields,
-.walp-calculated-fields *,
+.walp-.walp-input-group input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    display: none !important;
+}
+
+.walp-input-group input[type="number"],
+.walp-field-group input[type="number"] {
+    appearance: textfield !important;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: textfield !important;
+}
+
+/* Section Title */walp-input-fields *,
 .walp-summary,
 .walp-summary *,
 .walp-row,
@@ -40,46 +50,48 @@
     border: 1px solid #e5e5e5 !important;
     border-radius: 12px !important;
     padding: 20px !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 24px !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Input Row Layout */
-.walp-row {
+/* Unify responsive logic for rows and stats */
+.walp-row,
+.walp-stats {
     display: grid !important;
-    gap: 16px !important;
-    margin-bottom: 0 !important;
+    gap: 15px !important;
+    grid-template-columns: 1fr !important;
+    align-items: end !important;
 }
 
-/* Dimensions Row: Auto-fit columns to utilize available space */
-.walp-dimensions-row {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
-}
+@media (min-width: 560px) {
 
-/* Mobile: Single column */
-@media (max-width: 640px) {
-    .walp-row {
-        grid-template-columns: 1fr !important;
+    .walp-row,
+    .walp-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
     }
-    .walp-dimensions-row {
-        grid-template-columns: 1fr !important;
-    }
-}
 
-/* Tablet: Two columns */
-@media (min-width: 641px) and (max-width: 1024px) {
-    .walp-row {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-    .walp-dimensions-row {
+    .walp-calculated-row {
         grid-template-columns: repeat(2, 1fr) !important;
     }
 }
 
-/* Desktop: Flexible columns based on content */
 @media (min-width: 768px) {
-    .walp-row {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+
+    .walp-row,
+    .walp-stats {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (min-width: 1040px) {
+
+    .walp-row,
+    .walp-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .walp-calculated-row {
+        grid-template-columns: repeat(2, 1fr) !important;
     }
 }
 
@@ -116,7 +128,6 @@
     line-height: normal !important;
     color: #171717 !important;
     background: #fff !important;
-    background-color: #fff !important;
     border: none !important;
     border-radius: 0 !important;
     outline: none !important;
@@ -146,7 +157,6 @@
     line-height: normal !important;
     color: #171717 !important;
     background: #fff !important;
-    background-color: #fff !important;
     border: 1px solid #e5e5e5 !important;
     border-radius: 8px !important;
     transition: all 0.2s ease !important;
@@ -177,7 +187,6 @@
     display: flex !important;
     align-items: stretch !important;
     background: #fff !important;
-    background-color: #fff !important;
     border: 1px solid #e5e5e5 !important;
     border-radius: 8px !important;
     transition: all 0.2s ease !important;
@@ -201,7 +210,6 @@
     font-size: 14px !important;
     color: #171717 !important;
     background: transparent !important;
-    background-color: transparent !important;
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
@@ -221,7 +229,6 @@
     font-weight: 600 !important;
     color: #525252 !important;
     background: #fafafa !important;
-    background-color: #fafafa !important;
     border: none !important;
     border-radius: 0 !important;
     cursor: pointer !important;
@@ -237,13 +244,11 @@
 
 .walp-input-group button:hover {
     background: #f5f5f5 !important;
-    background-color: #f5f5f5 !important;
     color: #000 !important;
 }
 
 .walp-input-group button:active {
     background: #e5e5e5 !important;
-    background-color: #e5e5e5 !important;
     transform: scale(0.95) !important;
 }
 
@@ -272,58 +277,76 @@
     -webkit-appearance: textfield !important;
 }
 
-/* Calculated Fields Section */
-.walp-calculated-fields {
-    margin-top: 0 !important;
-    margin-bottom: 16px !important;
+/* Section Title */
+.walp-section-title {
+    margin-bottom: 20px !important;
     padding: 0 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    letter-spacing: -0.025em !important;
+    line-height: 1.2 !important;
+    position: relative !important;
 }
 
-/* Summary Section */
-.walp-summary {
-    margin-top: 16px !important;
+.walp-section-title::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -8px !important;
+    left: 0 !important;
+    width: 40px !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, #000 0%, #666 100%) !important;
+    border-radius: 2px !important;
+}
+
+/* Adjust underline position for collapsible headers */
+.walp-section-header.walp-section-title::after {
+    bottom: 12px !important;
+    left: 20px !important;
+}
+
+/* Collapsible Section */
+.walp-section-collapsible .walp-section-content {
+    display: none !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+}
+
+.walp-section-collapsible.expanded .walp-section-content {
+    display: block !important;
+    margin-top: 40px !important;
+}
+
+.walp-section-header {
+    cursor: pointer !important;
+    user-select: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     padding: 20px !important;
-    background: linear-gradient(to bottom, #fafafa, #fff) !important;
-    border: 1px solid #e5e5e5 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    margin: -20px !important;
+    border-radius: 12px 12px 0 0 !important;
+    background: transparent !important;
+    transition: background-color 0.2s ease !important;
 }
 
-.walp-summary h4 {
-    margin-bottom: 16px !important;
-    padding: 0 !important;
-    font-size: 16px !important;
-    font-weight: 600 !important;
-    color: #171717 !important;
-    letter-spacing: -0.01em !important;
-    line-height: 1.4 !important;
+.walp-section-header:hover {
+    background: rgba(0, 0, 0, 0.03) !important;
 }
 
-/* Stats Grid - 3 Columns */
-.walp-stats {
-    display: grid !important;
-    gap: 12px !important;
+.walp-toggle-arrow::after {
+    content: '' !important;
+    display: inline-block !important;
+    border: solid #333 !important;
+    border-width: 0 2px 2px 0 !important;
+    padding: 4px !important;
+    transform: rotate(45deg) !important;
+    transition: transform 0.3s ease !important;
 }
 
-/* Mobile: Single column */
-@media (max-width: 640px) {
-    .walp-stats {
-        grid-template-columns: 1fr !important;
-    }
-}
-
-/* Tablet: 2 columns */
-@media (min-width: 641px) and (max-width: 899px) {
-    .walp-stats {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-}
-
-/* Desktop: 3 columns */
-@media (min-width: 900px) {
-    .walp-stats {
-        grid-template-columns: repeat(3, 1fr) !important;
-    }
+.walp-section-collapsible.expanded .walp-toggle-arrow::after {
+    transform: rotate(-135deg) !important;
 }
 
 /* Stat Card */
@@ -373,33 +396,16 @@
     padding: 0 !important;
 }
 
-/* Mobile: Smaller font size */
-@media (max-width: 640px) {
-    .walp-stat-value {
-        font-size: 18px !important;
-    }
-}
-
-/* Stock Info Styling */
-.walp-stat-value span[style*="color:orange"] {
-    color: #f97316 !important;
-    font-weight: 700 !important;
-}
-
-.walp-stat-value span[style*="color: #666"] {
-    font-size: 13px !important;
-    line-height: 1.5 !important;
-    font-weight: 500 !important;
-    color: #737373 !important;
+/* Stock Info Styles */
+.walp-stock-info {
+    font-size: 0.8em !important;
+    line-height: 1.1 !important;
+    color: #666 !important;
     display: block !important;
-    margin-top: 4px !important;
-    padding: 0 !important;
 }
 
-/* Loading State */
-.walp-input-fields.loading {
-    opacity: 0.6 !important;
-    pointer-events: none !important;
+.walp-stock-warning {
+    color: #f97316 !important;
 }
 
 /* Focus Visible for Accessibility */
@@ -411,115 +417,4 @@
 .walp-field-group select:focus-visible {
     outline: 2px solid #000 !important;
     outline-offset: 2px !important;
-}
-
-/* Dark Mode Support (if theme supports it) */
-@media (prefers-color-scheme: dark) {
-    .walp-section {
-        background: #171717 !important;
-        border-color: #404040 !important;
-    }
-    
-    .walp-field-group label {
-        color: #a3a3a3 !important;
-    }
-    
-    .walp-field-group:focus-within label {
-        color: #fff !important;
-    }
-    
-    .walp-input-group,
-    .walp-field-group select,
-    .walp-field-group input[type="number"],
-    .walp-input-group input[type="number"] {
-        background: #262626 !important;
-        background-color: #262626 !important;
-        border-color: #404040 !important;
-        color: #e5e5e5 !important;
-    }
-    
-    .walp-input-group:hover,
-    .walp-field-group select:hover {
-        border-color: #525252 !important;
-    }
-    
-    .walp-input-group:focus-within,
-    .walp-field-group select:focus {
-        border-color: #fff !important;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    .walp-input-group button {
-        background: #1a1a1a !important;
-        background-color: #1a1a1a !important;
-        color: #a3a3a3 !important;
-        border-color: #404040 !important;
-    }
-    
-    .walp-input-group button:hover {
-        background: #404040 !important;
-        background-color: #404040 !important;
-        color: #fff !important;
-    }
-    
-    .walp-summary {
-        background: linear-gradient(to bottom, #171717, #0a0a0a) !important;
-        border-color: #404040 !important;
-    }
-    
-    .walp-summary h4 {
-        color: #e5e5e5 !important;
-    }
-    
-    .walp-stat-group {
-        background: #171717 !important;
-        border-color: #404040 !important;
-    }
-    
-    .walp-stat-group:hover {
-        border-color: #525252 !important;
-    }
-    
-    .walp-stat-label {
-        color: #737373 !important;
-    }
-    
-    .walp-stat-value {
-        color: #e5e5e5 !important;
-    }
-    
-    .walp-stat-value span[style*="color: #666"] {
-        color: #a3a3a3 !important;
-    }
-}
-
-/* Print Styles */
-@media print {
-    .walp-input-group button {
-        display: none !important;
-    }
-    
-    .walp-summary,
-    .walp-section {
-        box-shadow: none !important;
-        border: 1px solid #000 !important;
-    }
-}
-
-/* Smooth Animations */
-@media (prefers-reduced-motion: no-preference) {
-    .walp-stat-value,
-    .walp-stat-label {
-        transition: color 0.2s ease !important;
-    }
-}
-
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-    .walp-input-group,
-    .walp-field-group select,
-    .walp-stat-group,
-    .walp-section {
-        border-width: 2px !important;
-    }
 }
