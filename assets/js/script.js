@@ -35,6 +35,9 @@ var WALPCalculator = (function () {
             if (typeof $el === 'string') {
                 $el = jQuery($el);
             }
+            if (!$el.length) {
+                return defaultValue || 0;
+            }
             var val = $el.val().replace(',', '.');
             return parseFloat(val) || defaultValue || 0;
         },
