@@ -23,20 +23,22 @@ class WALP_Product_Handler
      */
     public function modify_price_html($price_html, $product)
     {
-        $product_type = $this->get_product_type_meta($product->get_id());
-        $meters_per_box = $this->get_meters_per_box_meta($product->get_id());
+        if (!is_admin()) {
+            $product_type = $this->get_product_type_meta($product->get_id());
+            $meters_per_box = $this->get_meters_per_box_meta($product->get_id());
 
-        if ($product_type === 'area' && $meters_per_box > 0) {
-            $price_per_m2 = $product->get_price() / $meters_per_box;
-            $box_price = $product->get_price();
-            
-            // Get quantity in box from attribute
-            $quantity_in_box = $this->get_quantity_in_box($product);
-            
-            $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . number_format($price_per_m2, 2, ',', ' ') . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>/m²</bdi></span><br>';
-            $price_html .= '<span class="walp-box-price"><bdi>' . number_format($box_price, 2, ',', ' ') . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>' . __('/opakowanie', 'woocommerce-area-length-plugin') . '</bdi></span>';
-            if ($quantity_in_box) {
-                $price_html .= '<span class="walp-box-price">' . sprintf(__('%d szt. w opakowaniu', 'woocommerce-area-length-plugin'), $quantity_in_box) . '</span>';
+            if ($product_type === 'area' && $meters_per_box > 0) {
+                $price_per_m2 = $product->get_price() / $meters_per_box;
+                $box_price = $product->get_price();
+                
+                // Get quantity in box from attribute
+                $quantity_in_box = $this->get_quantity_in_box($product);
+                
+                $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . number_format($price_per_m2, 2, ',', ' ') . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>/m²</bdi></span><br>';
+                $price_html .= '<span class="walp-box-price"><bdi>' . number_format($box_price, 2, ',', ' ') . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>' . __('/opakowanie', 'woocommerce-area-length-plugin') . '</bdi></span>';
+                if ($quantity_in_box) {
+                    $price_html .= '<span class="walp-box-price">' . sprintf(__('%d szt. w opakowaniu', 'woocommerce-area-length-plugin'), $quantity_in_box) . '</span>';
+                }
             }
         }
 
@@ -324,7 +326,7 @@ class WALP_Product_Handler
      */
     public function modify_stock_status($availability, $product)
     {
-        if ($product->is_in_stock()) {
+        if (!is_admin() && $product->is_in_stock()) {
             $stock_quantity = $product->get_stock_quantity();
             if ($stock_quantity > 1000) {
                 $availability['availability'] = __('1000+ w magazynie', 'woocommerce-area-length-plugin');
