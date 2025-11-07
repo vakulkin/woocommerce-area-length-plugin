@@ -173,6 +173,7 @@ class WALP_Product_Handler
                 echo '<select id="walp_margin" name="walp_margin">';
                 $margins = array(
                     0 => __('0% (Bez marginesu)', 'woocommerce-area-length-plugin'),
+                    5 => __('5% (Minimalny)', 'woocommerce-area-length-plugin'),
                     10 => __('10% (Standardowy)', 'woocommerce-area-length-plugin'),
                 );
                 foreach ($margins as $value => $label) {
