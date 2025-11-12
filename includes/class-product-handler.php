@@ -19,6 +19,81 @@ class WALP_Product_Handler
     }
 
     /**
+     * Get WooCommerce currency settings
+     */
+    private function get_woocommerce_currency_settings()
+    {
+        return array(
+            'symbol' => get_woocommerce_currency_symbol(),
+            'position' => get_option('woocommerce_currency_pos', 'left'),
+            'decimal_separator' => wc_get_price_decimal_separator(),
+            'thousand_separator' => wc_get_price_thousand_separator(),
+            'decimals' => wc_get_price_decimals()
+        );
+    }
+
+    /**
+     * Format price according to WooCommerce settings
+     */
+    private function format_price($price, $currency_settings)
+    {
+        return number_format(
+            $price,
+            $currency_settings['decimals'],
+            $currency_settings['decimal_separator'],
+            $currency_settings['thousand_separator']
+        );
+    }
+
+    /**
+     * Format currency display based on position
+     */
+    private function format_currency_display($formatted_price, $currency_symbol, $currency_position)
+    {
+        switch ($currency_position) {
+            case 'left':
+                return $currency_symbol . $formatted_price;
+            case 'left_space':
+                return $currency_symbol . ' ' . $formatted_price;
+            case 'right':
+                return $formatted_price . $currency_symbol;
+            case 'right_space':
+            default:
+                return $formatted_price . ' ' . $currency_symbol;
+        }
+    }
+
+    /**
+     * Generate price HTML for area products
+     */
+    private function generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings)
+    {
+        $formatted_price_per_m2 = $this->format_price($price_per_m2, $currency_settings);
+        $formatted_box_price = $this->format_price($box_price, $currency_settings);
+
+        $currency_display = $this->format_currency_display(
+            $formatted_price_per_m2,
+            $currency_settings['symbol'],
+            $currency_settings['position']
+        );
+
+        $box_currency_display = $this->format_currency_display(
+            $formatted_box_price,
+            $currency_settings['symbol'],
+            $currency_settings['position']
+        );
+
+        $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . '/m²</bdi></span><br>';
+        $price_html .= '<span class="walp-box-price"><bdi>' . $box_currency_display . __('/package', 'woocommerce-area-length-plugin') . '</bdi></span>';
+
+        if ($quantity_in_box) {
+            $price_html .= '<span class="walp-box-price">' . sprintf(__('%d pcs. in package', 'woocommerce-area-length-plugin'), $quantity_in_box) . '</span>';
+        }
+
+        return $price_html;
+    }
+
+    /**
      * Modify price HTML for area products to show price per m²
      */
     public function modify_price_html($price_html, $product)
@@ -30,15 +105,10 @@ class WALP_Product_Handler
             if ($product_type === 'area' && $meters_per_box > 0) {
                 $price_per_m2 = $product->get_price() / $meters_per_box;
                 $box_price = $product->get_price();
-                
-                // Get quantity in box from attribute
                 $quantity_in_box = $this->get_quantity_in_box($product);
-                
-                $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . number_format($price_per_m2, 2, ',', ' ') . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>/m²</bdi></span><br>';
-                $price_html .= '<span class="walp-box-price"><bdi>' . number_format($box_price, 2, ',', ' ') . '&nbsp;<span class="woocommerce-Price-currencySymbol">zł</span>' . __('/opakowanie', 'woocommerce-area-length-plugin') . '</bdi></span>';
-                if ($quantity_in_box) {
-                    $price_html .= '<span class="walp-box-price">' . sprintf(__('%d szt. w opakowaniu', 'woocommerce-area-length-plugin'), $quantity_in_box) . '</span>';
-                }
+                $currency_settings = $this->get_woocommerce_currency_settings();
+
+                $price_html = $this->generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings);
             }
         }
 
@@ -80,22 +150,22 @@ class WALP_Product_Handler
         // Product type dropdown
         woocommerce_wp_select(array(
             'id' => '_walp_product_type',
-            'label' => __('Typ pomiaru', 'woocommerce-area-length-plugin'),
+            'label' => __('Measurement Type', 'woocommerce-area-length-plugin'),
             'options' => array(
-                'standard' => __('Standardowy', 'woocommerce-area-length-plugin'),
-                'area' => __('Powierzchnia', 'woocommerce-area-length-plugin'),
-                'length' => __('Długość', 'woocommerce-area-length-plugin')
+                'standard' => __('Standard', 'woocommerce-area-length-plugin'),
+                'area' => __('Area', 'woocommerce-area-length-plugin'),
+                'length' => __('Length', 'woocommerce-area-length-plugin')
             ),
             'desc_tip' => true,
-            'description' => __('Wybierz typ pomiaru dla tego produktu.', 'woocommerce-area-length-plugin')
+            'description' => __('Select the measurement type for this product.', 'woocommerce-area-length-plugin')
         ));
 
         // Meters per box
         woocommerce_wp_text_input(array(
             'id' => '_walp_meters_per_box',
-            'label' => __('Metry na opakowanie', 'woocommerce-area-length-plugin'),
+            'label' => __('Meters per package', 'woocommerce-area-length-plugin'),
             'desc_tip' => true,
-            'description' => __('Wprowadź metry na opakowanie dla obliczeń ilości.', 'woocommerce-area-length-plugin'),
+            'description' => __('Enter meters per package for quantity calculations.', 'woocommerce-area-length-plugin'),
             'type' => 'number',
             'custom_attributes' => array(
                 'step' => '0.01',
@@ -147,6 +217,88 @@ class WALP_Product_Handler
         echo '</div>';
     }
 
+    /**
+     * Render dimensions input section for area products
+     */
+    private function render_area_dimensions_section()
+    {
+        echo '<div class="walp-section walp-section-collapsible">';
+        echo '<h4 class="walp-section-title walp-section-header">' . __('Room Dimensions', 'woocommerce-area-length-plugin') . '<span class="walp-toggle-arrow"></span></h4>';
+        echo '<div class="walp-section-content">';
+
+        echo '<div class="walp-row">';
+
+        $this->render_input_field('walp_length', __('Length (meters)', 'woocommerce-area-length-plugin'));
+        $this->render_input_field('walp_width', __('Width (meters)', 'woocommerce-area-length-plugin'));
+
+        $this->render_safety_margin_dropdown();
+
+        echo '</div>'; // .walp-row
+        echo '</div>'; // .walp-section-content
+        echo '</div>'; // .walp-section
+    }
+
+    /**
+     * Render safety margin dropdown
+     */
+    private function render_safety_margin_dropdown()
+    {
+        echo '<div class="walp-field-group">';
+        echo '<label for="walp_margin">' . __('Safety Margin', 'woocommerce-area-length-plugin') . '</label>';
+        echo '<select id="walp_margin" name="walp_margin">';
+        $margins = array(
+            0 => __('0% (No margin)', 'woocommerce-area-length-plugin'),
+            5 => __('5% (Minimal)', 'woocommerce-area-length-plugin'),
+            10 => __('10% (Standard)', 'woocommerce-area-length-plugin'),
+        );
+        foreach ($margins as $value => $label) {
+            $selected = ($value === 10) ? ' selected' : '';
+            echo '<option value="' . esc_attr($value) . '"' . $selected . '>' . esc_html($label) . '</option>';
+        }
+        echo '</select>';
+        echo '</div>';
+    }
+
+    /**
+     * Render calculated fields section
+     */
+    private function render_calculated_fields_section($product_type)
+    {
+        echo '<div class="walp-section">';
+        echo '<h4 class="walp-section-title">' . __('Required Quantity', 'woocommerce-area-length-plugin') . '</h4>';
+        echo '<div class="walp-row walp-calculated-row">';
+
+        if ($product_type === 'area') {
+            $this->render_input_field('walp_calculated_value', __('Total Area (m²)', 'woocommerce-area-length-plugin'));
+            $this->render_input_field('walp_calculated_qty', __('Packages Needed', 'woocommerce-area-length-plugin'), true);
+        } else {
+            $this->render_input_field('walp_calculated_value', __('Length (meters)', 'woocommerce-area-length-plugin'));
+            $this->render_input_field('walp_calculated_qty', __('Pieces Needed', 'woocommerce-area-length-plugin'), true);
+        }
+
+        echo '</div>'; // .walp-row
+        echo '</div>'; // .walp-section
+    }
+
+    /**
+     * Render summary section
+     */
+    private function render_summary_section($product_type)
+    {
+        echo '<div class="walp-summary">';
+        echo '<h4 class="walp-section-title">' . __('Summary', 'woocommerce-area-length-plugin') . '</h4>';
+        echo '<div class="walp-stats">';
+
+        $this->render_stat(__('Total:', 'woocommerce-area-length-plugin'), 'walp_total_value');
+        $boxes_label = $product_type === 'area' ? __('Packages:', 'woocommerce-area-length-plugin') : __('Pieces:', 'woocommerce-area-length-plugin');
+        $this->render_stat($boxes_label, 'walp_boxes_needed');
+
+        $this->render_stat(__('Final Price:', 'woocommerce-area-length-plugin'), 'walp_final_price');
+
+        echo '</div>';
+        echo '</div>'; // .walp-summary
+    }
+
     public function display_input_fields()
     {
         global $product;
@@ -158,67 +310,17 @@ class WALP_Product_Handler
         if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
             echo '<div class="walp-input-fields">';
 
-            // Dimensions input section with wrapper (only for area)
+            // Dimensions input section (only for area)
             if ($product_type === 'area') {
-                echo '<div class="walp-section walp-section-collapsible">';
-                echo '<h4 class="walp-section-title walp-section-header">' . __('Wymiary pomieszczenia', 'woocommerce-area-length-plugin') . '<span class="walp-toggle-arrow"></span></h4>';
-                echo '<div class="walp-section-content">';
-
-                echo '<div class="walp-row">';
-
-                $this->render_input_field('walp_length', __('Długość (metry)', 'woocommerce-area-length-plugin'));
-                $this->render_input_field('walp_width', __('Szerokość (metry)', 'woocommerce-area-length-plugin'));
-
-                // Safety margin dropdown only for area
-                echo '<div class="walp-field-group">';
-                echo '<label for="walp_margin">' . __('Zapas', 'woocommerce-area-length-plugin') . '</label>';
-                echo '<select id="walp_margin" name="walp_margin">';
-                $margins = array(
-                    0 => __('0% (Bez marginesu)', 'woocommerce-area-length-plugin'),
-                    5 => __('5% (Minimalny)', 'woocommerce-area-length-plugin'),
-                    10 => __('10% (Standardowy)', 'woocommerce-area-length-plugin'),
-                );
-                foreach ($margins as $value => $label) {
-                    $selected = ($value === 10) ? ' selected' : '';
-                    echo '<option value="' . esc_attr($value) . '"' . $selected . '>' . esc_html($label) . '</option>';
-                }
-                echo '</select>';
-                echo '</div>';
-
-                echo '</div>'; // .walp-row
-                echo '</div>'; // .walp-section-content
-                echo '</div>'; // .walp-section
+                $this->render_area_dimensions_section();
             }
 
-            // Calculated fields section with wrapper
-            echo '<div class="walp-section">';
-            echo '<h4 class="walp-section-title">' . __('Potrzebna ilość', 'woocommerce-area-length-plugin') . '</h4>';
-            echo '<div class="walp-row walp-calculated-row">';
-
-            if ($product_type === 'area') {
-                $this->render_input_field('walp_calculated_value', __('Całkowita powierzchnia (m²)', 'woocommerce-area-length-plugin'));
-                $this->render_input_field('walp_calculated_qty', __('Potrzebne opakowania', 'woocommerce-area-length-plugin'), true);
-            } else {
-                $this->render_input_field('walp_calculated_value', __('Długość (metry)', 'woocommerce-area-length-plugin'));
-                $this->render_input_field('walp_calculated_qty', __('Potrzebne sztuki', 'woocommerce-area-length-plugin'), true);
-            }
-
-            echo '</div>'; // .walp-row
-            echo '</div>'; // .walp-section
+            // Calculated fields section
+            $this->render_calculated_fields_section($product_type);
 
             // Summary section
-            echo '<div class="walp-summary">';
-            echo '<h4 class="walp-section-title">' . __('Podsumowanie', 'woocommerce-area-length-plugin') . '</h4>';
-            echo '<div class="walp-stats">';
+            $this->render_summary_section($product_type);
 
-            $this->render_stat(__('Razem:', 'woocommerce-area-length-plugin'), 'walp_total_value');
-            $boxes_label = $product_type === 'area' ? __('Opakowania:', 'woocommerce-area-length-plugin') : __('Sztuki:', 'woocommerce-area-length-plugin');
-            $this->render_stat($boxes_label, 'walp_boxes_needed');
-
-            $this->render_stat(__('Cena końcowa:', 'woocommerce-area-length-plugin'), 'walp_final_price');
-
-            echo '</div>';
-            echo '</div>'; // .walp-summary
             echo '</div>'; // .walp-input-fields
         }
     }
@@ -314,7 +416,7 @@ class WALP_Product_Handler
 
         if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
             if ($product_type === 'length') {
-                $suffix .= ' / ' . __('sztuka', 'woocommerce-area-length-plugin');
+                $suffix .= ' / ' . __('piece', 'woocommerce-area-length-plugin');
             }
         }
 
@@ -329,7 +431,7 @@ class WALP_Product_Handler
         if (!is_admin() && $product->is_in_stock()) {
             $stock_quantity = $product->get_stock_quantity();
             if ($stock_quantity > 1000) {
-                $availability['availability'] = __('1000+ w magazynie', 'woocommerce-area-length-plugin');
+                $availability['availability'] = __('1000+ in stock', 'woocommerce-area-length-plugin');
             }
         }
         return $availability;

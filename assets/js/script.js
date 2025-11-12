@@ -20,8 +20,21 @@ var WALPCalculator = (function () {
             finalPrice: '#walp_final_price'
         },
         defaults: {
-            minQty: 1,
-            defaultCurrency: 'zł'
+            minQty: 1
+        },
+        // Currency and i18n will be set from walpData
+        currency: typeof walpData !== 'undefined' ? walpData.currency : {
+            symbol: '$',
+            position: 'left',
+            decimalSeparator: '.',
+            thousandSeparator: ',',
+            decimals: 2
+        },
+        i18n: typeof walpData !== 'undefined' ? walpData.i18n : {
+            atLeast: 'at least:',
+            weHave: 'we have',
+            of: 'of',
+            inStock: 'in stock'
         }
     };
 
@@ -47,7 +60,29 @@ var WALPCalculator = (function () {
         },
 
         formatCurrency: function (amount, symbol) {
-            return amount.toFixed(2) + ' ' + symbol;
+            var formattedAmount = amount.toFixed(config.currency.decimals);
+            
+            // Replace decimal separator
+            formattedAmount = formattedAmount.replace('.', config.currency.decimalSeparator);
+            
+            // Add thousand separator
+            var parts = formattedAmount.split(config.currency.decimalSeparator);
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config.currency.thousandSeparator);
+            formattedAmount = parts.join(config.currency.decimalSeparator);
+            
+            // Format based on currency position
+            var currencySymbol = symbol || config.currency.symbol;
+            switch (config.currency.position) {
+                case 'left':
+                    return currencySymbol + formattedAmount;
+                case 'left_space':
+                    return currencySymbol + ' ' + formattedAmount;
+                case 'right':
+                    return formattedAmount + currencySymbol;
+                case 'right_space':
+                default:
+                    return formattedAmount + ' ' + currencySymbol;
+            }
         },
 
         formatMeasurement: function (value, unit) {
@@ -106,41 +141,51 @@ var WALPCalculator = (function () {
 
     // UI Update functions
     var ui = {
-        updateSummary: function (boxes, clampedQty, productType) {
-            var totalValue = '-';
-            var boxesNeeded = boxes > 0 ? boxes : '-';
-            var finalPrice = '-';
-
-            // Calculate total value based on product type
+        calculateTotalValue: function (boxes, productType) {
             var totalCalculated = utils.roundTo2(boxes * calculator.getMetersPerBox());
 
             if (boxes > 0) {
                 if (productType === 'area') {
-                    totalValue = utils.formatMeasurement(totalCalculated, 'm²');
+                    return utils.formatMeasurement(totalCalculated, 'm²');
                 } else if (productType === 'length') {
-                    totalValue = utils.formatMeasurement(totalCalculated, 'mb');
+                    return utils.formatMeasurement(totalCalculated, 'mb');
                 }
             }
 
-            // Calculate final price
+            return '-';
+        },
+
+        calculateFinalPrice: function (clampedQty) {
             if (clampedQty > 0) {
                 var productPrice = utils.getInputValue(config.selectors.productPrice, 0);
                 if (productPrice > 0) {
-                    finalPrice = utils.formatCurrency(productPrice * clampedQty, config.defaults.defaultCurrency);
+                    return utils.formatCurrency(productPrice * clampedQty);
                 }
             }
+            return '-';
+        },
 
-            // Check stock constraints
-            if (boxes > 0) {
-                if (clampedQty > boxes) {
-                    var stockInfo = 'co najmniej: ' + clampedQty;
-                    boxesNeeded += '<br><span class="walp-stock-info">' + stockInfo + '</span>';
-                } else if (clampedQty < boxes) {
-                    var stockInfo = 'mamy <span class="walp-stock-warning">' + clampedQty + '</span> z ' + boxes + ' na stanie';
-                    boxesNeeded = '<span class="walp-stock-info">' + stockInfo + '</span>';
-                }
-                // If clampedQty === boxes, boxesNeeded remains as boxes
+        generateStockInfo: function (boxes, clampedQty) {
+            if (boxes <= 0) return boxes > 0 ? boxes : '-';
+
+            var boxesNeeded = boxes;
+
+            if (clampedQty > boxes) {
+                var stockInfo = config.i18n.atLeast + ' ' + clampedQty;
+                boxesNeeded += '<br><span class="walp-stock-info">' + stockInfo + '</span>';
+            } else if (clampedQty < boxes) {
+                var stockInfo = config.i18n.weHave + ' <span class="walp-stock-warning">' + clampedQty + '</span> ' + config.i18n.of + ' ' + boxes + ' ' + config.i18n.inStock;
+                boxesNeeded = '<span class="walp-stock-info">' + stockInfo + '</span>';
             }
+            // If clampedQty === boxes, boxesNeeded remains as boxes
+
+            return boxesNeeded;
+        },
+
+        updateSummary: function (boxes, clampedQty, productType) {
+            var totalValue = this.calculateTotalValue(boxes, productType);
+            var boxesNeeded = this.generateStockInfo(boxes, clampedQty);
+            var finalPrice = this.calculateFinalPrice(clampedQty);
 
             // Update DOM
             jQuery(config.selectors.totalValue).text(totalValue);
