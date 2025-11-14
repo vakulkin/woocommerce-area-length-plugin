@@ -116,7 +116,7 @@ msgid "Final Price:"
 msgstr ""
 
 #: includes/class-product-handler.php:318
-msgid "piece"
+msgid "pc"
 msgstr ""
 
 #: includes/class-product-handler.php:333

@@ -118,8 +118,8 @@ msgid "Final Price:"
 msgstr "Кінцева ціна:"
 
 #: includes/class-product-handler.php:318
-msgid "piece"
-msgstr "штука"
+msgid "pc"
+msgstr "шт."
 
 #: includes/class-product-handler.php:333
 msgid "1000+ in stock"

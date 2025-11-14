@@ -105,7 +105,7 @@ class WALP_Product_Handler
             $currency_settings['position']
         );
 
-        $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . '/' . __('piece', 'woocommerce-area-length-plugin') . '</bdi></span>';
+        $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . '/' . __('pc', 'woocommerce-area-length-plugin') . '</bdi></span>';
 
         return $price_html;
     }
