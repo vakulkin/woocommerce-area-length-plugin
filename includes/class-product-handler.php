@@ -13,7 +13,6 @@ class WALP_Product_Handler
         add_action('woocommerce_before_add_to_cart_button', array( $this, 'display_hidden_fields' ), 5);
         add_action('woocommerce_before_add_to_cart_quantity', array( $this, 'hide_standard_quantity' ));
         add_action('woocommerce_after_add_to_cart_button', array( $this, 'modify_add_to_cart_button' ));
-        add_filter('woocommerce_get_price_suffix', array( $this, 'add_price_suffix' ), 10, 2);
         add_filter('woocommerce_get_price_html', array( $this, 'modify_price_html' ), 10, 2);
         add_filter('woocommerce_get_availability', array( $this, 'modify_stock_status' ), 10, 2);
     }
@@ -94,7 +93,25 @@ class WALP_Product_Handler
     }
 
     /**
-     * Modify price HTML for area products to show price per m²
+     * Generate price HTML for length products
+     */
+    private function generate_length_price_html($price, $currency_settings)
+    {
+        $formatted_price = $this->format_price($price, $currency_settings);
+
+        $currency_display = $this->format_currency_display(
+            $formatted_price,
+            $currency_settings['symbol'],
+            $currency_settings['position']
+        );
+
+        $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . '/' . __('piece', 'woocommerce-area-length-plugin') . '</bdi></span>';
+
+        return $price_html;
+    }
+
+    /**
+     * Modify price HTML for area and length products
      */
     public function modify_price_html($price_html, $product)
     {
@@ -107,8 +124,11 @@ class WALP_Product_Handler
                 $box_price = $product->get_price();
                 $quantity_in_box = $this->get_quantity_in_box($product);
                 $currency_settings = $this->get_woocommerce_currency_settings();
-
                 $price_html = $this->generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings);
+            } elseif ($product_type === 'length' && $meters_per_box > 0) {
+                $price = $product->get_price();
+                $currency_settings = $this->get_woocommerce_currency_settings();
+                $price_html = $this->generate_length_price_html($price, $currency_settings);
             }
         }
 
@@ -404,23 +424,6 @@ class WALP_Product_Handler
     public static function get_meters_per_box($product_id)
     {
         return floatval(get_post_meta($product_id, '_walp_meters_per_box', true));
-    }
-
-    /**
-     * Add price suffix based on product type
-     */
-    public function add_price_suffix($suffix, $product)
-    {
-        $product_type = $this->get_product_type_meta($product->get_id());
-        $meters_per_box = $this->get_meters_per_box_meta($product->get_id());
-
-        if (($product_type === 'area' || $product_type === 'length') && $meters_per_box > 0) {
-            if ($product_type === 'length') {
-                $suffix .= ' / ' . __('piece', 'woocommerce-area-length-plugin');
-            }
-        }
-
-        return $suffix;
     }
 
     /**
