@@ -65,7 +65,7 @@ class WALP_Product_Handler
     /**
      * Generate price display HTML with sale formatting
      */
-    private function generate_price_display_html($price, $regular_price, $unit, $currency_settings, $css_class = '')
+    private function generate_price_display_html($price, $regular_price, $unit, $currency_settings)
     {
         $formatted_price = $this->format_price($price, $currency_settings);
         $currency_display = $this->format_currency_display(
@@ -74,8 +74,7 @@ class WALP_Product_Handler
             $currency_settings['position']
         );
 
-        $class_attr = $css_class ? ' class="' . esc_attr($css_class) . '"' : '';
-        $html = '<span' . $class_attr . '>';
+        $html = '';
         if ($regular_price && $regular_price > $price) {
             $formatted_regular = $this->format_price($regular_price, $currency_settings);
             $regular_display = $this->format_currency_display(
@@ -86,7 +85,6 @@ class WALP_Product_Handler
             $html .= '<del><span class="woocommerce-Price-amount amount"><bdi>' . $regular_display . $unit . '</bdi></span></del> ';
         }
         $html .= '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . $unit . '</bdi></span>';
-        $html .= '</span>';
 
         return $html;
     }
@@ -96,19 +94,23 @@ class WALP_Product_Handler
      */
     private function generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings, $regular_price_per_m2 = null, $regular_box_price = null)
     {
-        $html = '<div class="walp-price-line walp-price-per-m2">';
+        $html = '<div class="walp-price-container">';
+
+        $html .= '<div class="walp-price-per-m2">';
         $html .= $this->generate_price_display_html($price_per_m2, $regular_price_per_m2, '/m²', $currency_settings);
         $html .= '</div>';
 
-        $html .= '<div class="walp-price-line walp-price-per-package">';
+        $html .= '<div class="walp-price-per-package">';
         $html .= $this->generate_price_display_html($box_price, $regular_box_price, __('/package', 'woocommerce-area-length-plugin'), $currency_settings);
         $html .= '</div>';
 
         if ($quantity_in_box) {
-            $html .= '<div class="walp-price-line walp-quantity-info">';
+            $html .= '<div class="walp-quantity-info">';
             $html .= sprintf(__('%d pcs. in package', 'woocommerce-area-length-plugin'), $quantity_in_box);
             $html .= '</div>';
         }
+
+        $html .= '</div>';
 
         return $html;
     }
@@ -118,7 +120,7 @@ class WALP_Product_Handler
      */
     private function generate_length_price_html($price, $currency_settings, $regular_price = null)
     {
-        return '<div class="walp-price-line walp-price-per-piece">' . $this->generate_price_display_html($price, $regular_price, '/' . __('pc', 'woocommerce-area-length-plugin'), $currency_settings) . '</div>';
+        return '<div class="walp-price-container"><div class="walp-price-per-piece">' . $this->generate_price_display_html($price, $regular_price, '/' . __('pc', 'woocommerce-area-length-plugin'), $currency_settings) . '</div></div>';
     }
 
     /**
