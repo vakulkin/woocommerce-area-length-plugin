@@ -63,51 +63,66 @@ class WALP_Product_Handler
     }
 
     /**
-     * Generate price HTML for area products
+     * Generate price display HTML with sale formatting
      */
-    private function generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings)
-    {
-        $formatted_price_per_m2 = $this->format_price($price_per_m2, $currency_settings);
-        $formatted_box_price = $this->format_price($box_price, $currency_settings);
-
-        $currency_display = $this->format_currency_display(
-            $formatted_price_per_m2,
-            $currency_settings['symbol'],
-            $currency_settings['position']
-        );
-
-        $box_currency_display = $this->format_currency_display(
-            $formatted_box_price,
-            $currency_settings['symbol'],
-            $currency_settings['position']
-        );
-
-        $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . '/m²</bdi></span><br>';
-        $price_html .= '<span class="walp-box-price"><bdi>' . $box_currency_display . __('/package', 'woocommerce-area-length-plugin') . '</bdi></span>';
-
-        if ($quantity_in_box) {
-            $price_html .= '<span class="walp-box-price">' . sprintf(__('%d pcs. in package', 'woocommerce-area-length-plugin'), $quantity_in_box) . '</span>';
-        }
-
-        return $price_html;
-    }
-
-    /**
-     * Generate price HTML for length products
-     */
-    private function generate_length_price_html($price, $currency_settings)
+    private function generate_price_display_html($price, $regular_price, $unit, $currency_settings)
     {
         $formatted_price = $this->format_price($price, $currency_settings);
-
         $currency_display = $this->format_currency_display(
             $formatted_price,
             $currency_settings['symbol'],
             $currency_settings['position']
         );
 
-        $price_html = '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . '/' . __('pc', 'woocommerce-area-length-plugin') . '</bdi></span>';
+        $html = '';
+        if ($regular_price && $regular_price > $price) {
+            $formatted_regular = $this->format_price($regular_price, $currency_settings);
+            $regular_display = $this->format_currency_display(
+                $formatted_regular,
+                $currency_settings['symbol'],
+                $currency_settings['position']
+            );
+            $html .= '<del><span class="woocommerce-Price-amount amount"><bdi>' . $regular_display . $unit . '</bdi></span></del> ';
+        }
+        $html .= '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . $unit . '</bdi></span>';
 
-        return $price_html;
+        return $html;
+    }
+
+    /**
+     * Generate price HTML for area products
+     */
+    private function generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings, $regular_price_per_m2 = null, $regular_box_price = null)
+    {
+        $html = $this->generate_price_display_html($price_per_m2, $regular_price_per_m2, '/m²', $currency_settings) . '<br>';
+        $html .= '<span class="walp-box-price">' . $this->generate_price_display_html($box_price, $regular_box_price, __('/package', 'woocommerce-area-length-plugin'), $currency_settings) . '</span>';
+
+        if ($quantity_in_box) {
+            $html .= '<span class="walp-box-price">' . sprintf(__('%d pcs. in package', 'woocommerce-area-length-plugin'), $quantity_in_box) . '</span>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * Generate price HTML for length products
+     */
+    private function generate_length_price_html($price, $currency_settings, $regular_price = null)
+    {
+        return $this->generate_price_display_html($price, $regular_price, '/' . __('pc', 'woocommerce-area-length-plugin'), $currency_settings);
+    }
+
+    /**
+     * Get sale prices for a product
+     */
+    private function get_sale_prices($product)
+    {
+        if (!$product->is_on_sale()) {
+            return [null, null];
+        }
+
+        $regular_price = $product->get_regular_price();
+        return $regular_price ? [$regular_price, $regular_price] : [null, null];
     }
 
     /**
@@ -115,21 +130,33 @@ class WALP_Product_Handler
      */
     public function modify_price_html($price_html, $product)
     {
-        if (!is_admin()) {
-            $product_type = $this->get_product_type_meta($product->get_id());
-            $meters_per_box = $this->get_meters_per_box_meta($product->get_id());
+        if (is_admin()) {
+            return $price_html;
+        }
 
-            if ($product_type === 'area' && $meters_per_box > 0) {
-                $price_per_m2 = $product->get_price() / $meters_per_box;
-                $box_price = $product->get_price();
-                $quantity_in_box = $this->get_quantity_in_box($product);
-                $currency_settings = $this->get_woocommerce_currency_settings();
-                $price_html = $this->generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings);
-            } elseif ($product_type === 'length' && $meters_per_box > 0) {
-                $price = $product->get_price();
-                $currency_settings = $this->get_woocommerce_currency_settings();
-                $price_html = $this->generate_length_price_html($price, $currency_settings);
-            }
+        $product_id = $product->get_id();
+        $product_type = $this->get_product_type_meta($product_id);
+        $meters_per_box = $this->get_meters_per_box_meta($product_id);
+
+        if (!$meters_per_box) {
+            return $price_html;
+        }
+
+        $currency_settings = $this->get_woocommerce_currency_settings();
+        list($regular_price, $regular_box_price) = $this->get_sale_prices($product);
+
+        if ($product_type === 'area') {
+            $price_per_m2 = $product->get_price() / $meters_per_box;
+            $box_price = $product->get_price();
+            $quantity_in_box = $this->get_quantity_in_box($product);
+
+            $regular_price_per_m2 = $regular_price ? $regular_price / $meters_per_box : null;
+
+            return $this->generate_area_price_html($price_per_m2, $box_price, $quantity_in_box, $currency_settings, $regular_price_per_m2, $regular_box_price);
+        }
+
+        if ($product_type === 'length') {
+            return $this->generate_length_price_html($product->get_price(), $currency_settings, $regular_price);
         }
 
         return $price_html;
@@ -156,8 +183,8 @@ class WALP_Product_Handler
      */
     private function get_quantity_in_box($product)
     {
-        $terms = wc_get_product_terms($product->get_id(), 'pa_ilosc-sztuk-w-opakowaniu', array('fields' => 'names'));
-        return !empty($terms) ? intval($terms[0]) : 0;
+        $terms = wc_get_product_terms($product->get_id(), 'pa_ilosc-sztuk-w-opakowaniu', array( 'fields' => 'names' ));
+        return ! empty($terms) ? intval($terms[0]) : 0;
     }
 
     /**
@@ -431,7 +458,7 @@ class WALP_Product_Handler
      */
     public function modify_stock_status($availability, $product)
     {
-        if (!is_admin() && $product->is_in_stock()) {
+        if (! is_admin() && $product->is_in_stock()) {
             $stock_quantity = $product->get_stock_quantity();
             if ($stock_quantity > 1000) {
                 $availability['availability'] = __('1000+ in stock', 'woocommerce-area-length-plugin');
