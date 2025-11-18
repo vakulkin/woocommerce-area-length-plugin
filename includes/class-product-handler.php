@@ -82,9 +82,11 @@ class WALP_Product_Handler
                 $currency_settings['symbol'],
                 $currency_settings['position']
             );
-            $html .= '<del><span class="woocommerce-Price-amount amount"><bdi>' . $regular_display . $unit . '</bdi></span></del> ';
+            $html .= '<del><span class="woocommerce-Price-amount amount walp_regular_old_price"><bdi>' . $regular_display . $unit . '</bdi></span></del> ';
+            $html .= '<span class="woocommerce-Price-amount amount walp_sale_price"><bdi>' . $currency_display . $unit . '</bdi></span>';
+        } else {
+            $html .= '<span class="woocommerce-Price-amount amount walp_regular_price"><bdi>' . $currency_display . $unit . '</bdi></span>';
         }
-        $html .= '<span class="woocommerce-Price-amount amount"><bdi>' . $currency_display . $unit . '</bdi></span>';
 
         return $html;
     }
