@@ -52,6 +52,18 @@ msgstr "Метрів на упаковку"
 msgid "Enter meters per package for quantity calculations."
 msgstr "Введіть метри на упаковку для розрахунку кількості."
 
+#: includes/class-product-handler.php:276
+msgid "Custom Unit"
+msgstr "Користувацька одиниця"
+
+#: includes/class-product-handler.php:278
+msgid "Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, default units will be used."
+msgstr "Введіть текст користувацької одиниці (наприклад, \"кг\", \"літри\", \"коробки\"). Якщо залишити порожнім, будуть використані стандартні одиниці."
+
+#: includes/class-product-handler.php:279
+msgid "e.g., kg, liters, boxes"
+msgstr "наприклад, кг, літри, коробки"
+
 #: includes/class-product-handler.php:164
 msgid "Room Dimensions"
 msgstr "Розміри приміщення"

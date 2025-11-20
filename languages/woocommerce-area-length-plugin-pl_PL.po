@@ -52,6 +52,18 @@ msgstr "Metry na opakowanie"
 msgid "Enter meters per package for quantity calculations."
 msgstr "Wprowadź metry na opakowanie dla obliczeń ilości."
 
+#: includes/class-product-handler.php:276
+msgid "Custom Unit"
+msgstr "Jednostka niestandardowa"
+
+#: includes/class-product-handler.php:278
+msgid "Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, default units will be used."
+msgstr "Wprowadź tekst jednostki niestandardowej (np. \"kg\", \"litry\", \"pudełka\"). Jeśli pozostawisz puste, zostaną użyte domyślne jednostki."
+
+#: includes/class-product-handler.php:279
+msgid "e.g., kg, liters, boxes"
+msgstr "np. kg, litry, pudełka"
+
 #: includes/class-product-handler.php:164
 msgid "Room Dimensions"
 msgstr "Wymiary pomieszczenia"
