@@ -89,8 +89,8 @@ class WALP_Product_Handler {
 	 * Generate price HTML for area products
 	 */
 	private function generate_area_price_html( $price_per_m2, $box_price, $quantity_in_box, $currency_settings, $product_id, $regular_price_per_m2 = null, $regular_box_price = null ) {
-		$unit = $this->get_product_unit( $product_id, 'area' );
-		$package_unit = ! empty( $unit ) ? $unit : __( '/package', 'woocommerce-area-length-plugin' );
+		$unit = '/m²';
+		$package_unit = __( '/package', 'woocommerce-area-length-plugin' );
 
 		$html = '<div class="walp-price-container">';
 
@@ -116,8 +116,8 @@ class WALP_Product_Handler {
 	/**
 	 * Generate price HTML for length products
 	 */
-	private function generate_length_price_html( $price, $currency_settings, $product_id, $regular_price = null ) {
-		$unit = $this->get_product_unit( $product_id, 'length' );
+	private function generate_length_price_html( $price, $currency_settings, $regular_price ) {
+		$unit = __( 'pc', 'woocommerce-area-length-plugin' );
 		return '<div class="walp-price-container"><div class="walp-price-per-piece">' . $this->generate_price_display_html( $price, $regular_price, $unit, $currency_settings ) . '</div></div>';
 	}
 
@@ -151,16 +151,15 @@ class WALP_Product_Handler {
 
 		if ( $product_type === 'area' ) {
 			$price_per_m2 = $product->get_price() / $meters_per_box;
-			$box_price = $product->get_price();
 			$quantity_in_box = $this->get_quantity_in_box( $product );
 
 			$regular_price_per_m2 = $regular_price ? $regular_price / $meters_per_box : null;
 
-			return $this->generate_area_price_html( $price_per_m2, $box_price, $quantity_in_box, $currency_settings, $product_id, $regular_price_per_m2, $regular_price );
+			return $this->generate_area_price_html( $price_per_m2, $price, $quantity_in_box, $currency_settings, $product_id, $regular_price_per_m2, $regular_price );
 		}
 
 		if ( $product_type === 'length' ) {
-			return $this->generate_length_price_html( $product->get_price(), $currency_settings, $product_id, $regular_price );
+			return $this->generate_length_price_html( $product->get_price(), $currency_settings, $regular_price );
 		}
 
 		return $this->generate_standard_price_html( $price, $regular_price, $price_suffix, $currency_settings );
@@ -227,15 +226,7 @@ class WALP_Product_Handler {
 			return '/' . $custom_unit;
 		}
 
-		// Otherwise use default units based on product type
-		switch ( $product_type ) {
-			case 'area':
-				return '/m²';
-			case 'length':
-				return '/' . __( 'pc', 'woocommerce-area-length-plugin' );
-			default:
-				return '';
-		}
+        return '';
 	}
 
 	/**
