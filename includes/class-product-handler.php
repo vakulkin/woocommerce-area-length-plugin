@@ -90,7 +90,7 @@ class WALP_Product_Handler {
 	 * Generate price HTML for area products
 	 */
 	private function generate_area_price_html( $price_per_m2, $box_price, $quantity_in_box, $currency_settings, $product_id, $regular_price_per_m2 = null, $regular_box_price = null ) {
-		$unit = '/' . $this->get_unit_string( $product_id );
+		$unit = $this->get_product_unit( $product_id);
 		$package_unit = '/' . __( 'pkg', 'woocommerce-area-length-plugin' );
 
 		$html = '<div class="walp-price-container">';
@@ -118,7 +118,7 @@ class WALP_Product_Handler {
 	 * Generate price HTML for length products
 	 */
 	private function generate_length_price_html( $price, $currency_settings, $regular_price, $product_id ) {
-		$unit = $this->get_unit_string( $product_id );
+		$unit = $this->get_product_unit( $product_id);
 		return '<div class="walp-price-container"><div class="walp-price-per-piece">' . $this->generate_price_display_html( $price, $regular_price, $unit, $currency_settings ) . '</div></div>';
 	}
 
@@ -143,7 +143,7 @@ class WALP_Product_Handler {
 
 		$price = $product->get_price();
 		$regular_price = $product->get_regular_price();
-		$price_suffix = $this->get_product_unit( $product_id, $product_type );
+		$price_suffix = $this->get_product_unit( $product_id );
 		$currency_settings = $this->get_woocommerce_currency_settings();
 
 		if ( ! $meters_per_box ) {
@@ -219,9 +219,9 @@ class WALP_Product_Handler {
 	/**
 	 * Get unit for product display
 	 */
-	private function get_product_unit( $product_id, $product_type ) {
+	private function get_product_unit( $product_id ) {
 		$unit = $this->get_unit_string( $product_id );
-		return $product_type === 'length' ? $unit : '/' . $unit;
+		return ! empty( $unit ) ? '/' . $unit : '';
 	}
 
 	/**
@@ -545,7 +545,7 @@ class WALP_Product_Handler {
 		}
 		
 		$product_id = $product->get_id();
-		$unit = '/' . $this->get_unit_string( $product_id );
+		$unit = $this->get_product_unit( $product_id );
 		
 		if ( ! empty( $unit ) ) {
 			// Append the unit after the price placeholder (%2$s) in the message template

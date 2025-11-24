@@ -153,9 +153,9 @@ msgstr ""
 #: includes/class-product-handler.php:545
 #, php-format
 msgid "1000+ %s in stock"
-msgstr ""
+msgstr "1000+ %s w magazynie"
 
 #: includes/class-product-handler.php:547
 #, php-format
 msgid "%d %s in stock"
-msgstr ""
+msgstr "%d %s w magazynie"
