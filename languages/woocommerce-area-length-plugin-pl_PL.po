@@ -19,7 +19,7 @@ msgstr ""
 
 #: includes/class-product-handler.php:94
 msgid "pkg"
-msgstr ""
+msgstr "opak."
 
 #: includes/class-product-handler.php:108
 #, php-format
@@ -28,7 +28,7 @@ msgstr ""
 
 #: includes/class-product-handler.php:249
 msgid "m²"
-msgstr ""
+msgstr "m²"
 
 #: includes/class-product-handler.php:251
 msgid "opak."

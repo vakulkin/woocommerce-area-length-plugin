@@ -512,7 +512,7 @@ class WALP_Product_Handler {
 	 * Modify stock status display
 	 */
 	public function modify_stock_status( $availability, $product ) {
-		if ( ! is_admin() && $product->is_in_stock() ) {
+		if ( ! is_admin() && $product->managing_stock() && $product->is_in_stock() ) {
 			$product_id = $product->get_id();
 			$product_type = $this->get_product_type_meta( $product_id );
 			$unit = '';
@@ -549,7 +549,7 @@ class WALP_Product_Handler {
 		
 		if ( ! empty( $unit ) ) {
 			// Append the unit after the price placeholder (%2$s) in the message template
-			$message = str_replace( '%2$s', '%2$s ' . $unit, $message );
+			$message = str_replace( '%2$s', '%2$s' . $unit, $message );
 		}
 		
 		return $message;
