@@ -1,152 +1,164 @@
-# Copyright (C) 2025 WooCommerce Area and Length Products
+# SOME DESCRIPTIVE TITLE.
+# Copyright #: includes/class-product-handler.php:318
+msgid "pcs"
+msgstr "" YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the WooCommerce Area and Length Products package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Area and Length Products 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-area-length-plugin\n"
-"POT-Creation-Date: 2025-11-12 12:00:00+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-area-"
+"length-plugin\n"
+"POT-Creation-Date: 2025-11-24 11:24+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: en\n"
 
-#: includes/class-product-handler.php:38
-msgid "/package"
+#: includes/class-product-handler.php:94
+msgid "pkg"
 msgstr ""
 
-#: includes/class-product-handler.php:40
+#: includes/class-product-handler.php:108
 #, php-format
 msgid "%d pcs. in package"
 msgstr ""
 
-#: includes/class-product-handler.php:83
-msgid "Measurement Type"
+#: includes/class-product-handler.php:249
+msgid "m²"
 msgstr ""
 
-#: includes/class-product-handler.php:85
-msgid "Standard"
+#: includes/class-product-handler.php:251
+msgid "opak."
 msgstr ""
 
-#: includes/class-product-handler.php:86
-msgid "Area"
-msgstr ""
-
-#: includes/class-product-handler.php:87
-msgid "Length"
-msgstr ""
-
-#: includes/class-product-handler.php:90
-msgid "Select the measurement type for this product."
-msgstr ""
-
-#: includes/class-product-handler.php:96
-msgid "Meters per package"
-msgstr ""
-
-#: includes/class-product-handler.php:98
-msgid "Enter meters per package for quantity calculations."
-msgstr ""
-
-#: includes/class-product-handler.php:276
-msgid "Custom Unit"
-msgstr ""
-
-#: includes/class-product-handler.php:278
-msgid "Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, default units will be used."
-msgstr ""
-
-#: includes/class-product-handler.php:279
-msgid "e.g., kg, liters, boxes"
-msgstr ""
-
-#: includes/class-product-handler.php:164
-msgid "Room Dimensions"
-msgstr ""
-
-#: includes/class-product-handler.php:169
-msgid "Length (meters)"
-msgstr ""
-
-#: includes/class-product-handler.php:170
-msgid "Width (meters)"
-msgstr ""
-
-#: includes/class-product-handler.php:174
-msgid "Safety Margin"
-msgstr ""
-
-#: includes/class-product-handler.php:177
-msgid "0% (No margin)"
-msgstr ""
-
-#: includes/class-product-handler.php:178
-msgid "5% (Minimal)"
-msgstr ""
-
-#: includes/class-product-handler.php:179
-msgid "10% (Standard)"
-msgstr ""
-
-#: includes/class-product-handler.php:195
-msgid "Required Quantity"
-msgstr ""
-
-#: includes/class-product-handler.php:199
-msgid "Total Area (m²)"
-msgstr ""
-
-#: includes/class-product-handler.php:200
-msgid "Packages Needed"
-msgstr ""
-
-#: includes/class-product-handler.php:202
-#: includes/class-product-handler.php:203
-msgid "Pieces Needed"
-msgstr ""
-
-#: includes/class-product-handler.php:210
-msgid "Summary"
-msgstr ""
-
-#: includes/class-product-handler.php:213
-msgid "Total:"
-msgstr ""
-
-#: includes/class-product-handler.php:214
-msgid "Packages:"
-msgstr ""
-
-#: includes/class-product-handler.php:214
-msgid "Pieces:"
-msgstr ""
-
-#: includes/class-product-handler.php:217
-msgid "Final Price:"
-msgstr ""
-
-#: includes/class-product-handler.php:318
+#: includes/class-product-handler.php:258
+#: includes/class-product-handler.php:260
 msgid "pc"
 msgstr ""
 
-#: includes/class-product-handler.php:333
-msgid "1000+ in stock"
+#: includes/class-product-handler.php:262
+msgid "szt."
 msgstr ""
 
-#: woocommerce-area-length-plugin.php:46
-msgid "at least:"
+#: includes/class-product-handler.php:280
+msgid "Measurement Type"
 msgstr ""
 
-#: woocommerce-area-length-plugin.php:47
-msgid "we have"
+#: includes/class-product-handler.php:282
+msgid "Standard"
 msgstr ""
 
-#: woocommerce-area-length-plugin.php:48
-msgid "of"
+#: includes/class-product-handler.php:283
+msgid "Area"
 msgstr ""
 
-#: woocommerce-area-length-plugin.php:49
-msgid "in stock"
+#: includes/class-product-handler.php:284
+msgid "Length"
+msgstr ""
+
+#: includes/class-product-handler.php:287
+msgid "Select the measurement type for this product."
+msgstr ""
+
+#: includes/class-product-handler.php:293
+msgid "Meters per package"
+msgstr ""
+
+#: includes/class-product-handler.php:295
+msgid "Enter meters per package for quantity calculations."
+msgstr ""
+
+#: includes/class-product-handler.php:306
+msgid "Custom Unit"
+msgstr ""
+
+#: includes/class-product-handler.php:308
+msgid ""
+"Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, "
+"default units will be used."
+msgstr ""
+
+#: includes/class-product-handler.php:309
+msgid "e.g., kg, liters, boxes"
+msgstr ""
+
+#: includes/class-product-handler.php:360
+msgid "Room Dimensions"
+msgstr ""
+
+#: includes/class-product-handler.php:365
+#: includes/class-product-handler.php:407
+msgid "Length (meters)"
+msgstr ""
+
+#: includes/class-product-handler.php:366
+msgid "Width (meters)"
+msgstr ""
+
+#: includes/class-product-handler.php:380
+msgid "Safety Margin"
+msgstr ""
+
+#: includes/class-product-handler.php:383
+msgid "0% (No margin)"
+msgstr ""
+
+#: includes/class-product-handler.php:384
+msgid "5% (Minimal)"
+msgstr ""
+
+#: includes/class-product-handler.php:385
+msgid "10% (Standard)"
+msgstr ""
+
+#: includes/class-product-handler.php:400
+msgid "Required Quantity"
+msgstr ""
+
+#: includes/class-product-handler.php:404
+msgid "Total Area (m²)"
+msgstr ""
+
+#: includes/class-product-handler.php:405
+msgid "Packages Needed"
+msgstr ""
+
+#: includes/class-product-handler.php:408
+msgid "Pieces Needed"
+msgstr ""
+
+#: includes/class-product-handler.php:420
+msgid "Summary"
+msgstr ""
+
+#: includes/class-product-handler.php:423
+msgid "Total:"
+msgstr ""
+
+#: includes/class-product-handler.php:424
+msgid "Packages:"
+msgstr ""
+
+#: includes/class-product-handler.php:424
+msgid "Pieces:"
+msgstr ""
+
+#: includes/class-product-handler.php:427
+msgid "Final Price:"
+msgstr ""
+
+#: includes/class-product-handler.php:545
+#, php-format
+msgid "1000+ %s in stock"
+msgstr ""
+
+#: includes/class-product-handler.php:547
+#, php-format
+msgid "%d %s in stock"
 msgstr ""

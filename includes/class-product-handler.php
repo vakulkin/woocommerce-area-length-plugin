@@ -13,6 +13,7 @@ class WALP_Product_Handler {
 		add_action( 'woocommerce_after_add_to_cart_button', array( $this, 'modify_add_to_cart_button' ) );
 		add_filter( 'woocommerce_get_price_html', array( $this, 'modify_price_html' ), 10, 2 );
 		add_filter( 'woocommerce_get_availability', array( $this, 'modify_stock_status' ), 10, 2 );
+		add_filter( 'iworks_omnibus_message_template', array( $this, 'add_unit_to_omnibus_message_template' ), 10, 3 );
 	}
 
 	/**
@@ -89,8 +90,8 @@ class WALP_Product_Handler {
 	 * Generate price HTML for area products
 	 */
 	private function generate_area_price_html( $price_per_m2, $box_price, $quantity_in_box, $currency_settings, $product_id, $regular_price_per_m2 = null, $regular_box_price = null ) {
-		$unit = '/m²';
-		$package_unit = __( '/package', 'woocommerce-area-length-plugin' );
+		$unit = '/' . $this->get_unit_string( $product_id );
+		$package_unit = '/' . __( 'pkg', 'woocommerce-area-length-plugin' );
 
 		$html = '<div class="walp-price-container">';
 
@@ -116,8 +117,8 @@ class WALP_Product_Handler {
 	/**
 	 * Generate price HTML for length products
 	 */
-	private function generate_length_price_html( $price, $currency_settings, $regular_price ) {
-		$unit = __( 'pc', 'woocommerce-area-length-plugin' );
+	private function generate_length_price_html( $price, $currency_settings, $regular_price, $product_id ) {
+		$unit = $this->get_unit_string( $product_id );
 		return '<div class="walp-price-container"><div class="walp-price-per-piece">' . $this->generate_price_display_html( $price, $regular_price, $unit, $currency_settings ) . '</div></div>';
 	}
 
@@ -159,7 +160,7 @@ class WALP_Product_Handler {
 		}
 
 		if ( $product_type === 'length' ) {
-			return $this->generate_length_price_html( $product->get_price(), $currency_settings, $regular_price );
+			return $this->generate_length_price_html( $product->get_price(), $currency_settings, $regular_price, $product_id );
 		}
 
 		return $this->generate_standard_price_html( $price, $regular_price, $price_suffix, $currency_settings );
@@ -219,14 +220,29 @@ class WALP_Product_Handler {
 	 * Get unit for product display
 	 */
 	private function get_product_unit( $product_id, $product_type ) {
+		$unit = $this->get_unit_string( $product_id );
+		return $product_type === 'length' ? $unit : '/' . $unit;
+	}
+
+	/**
+	 * Unified method to get unit string
+	 */
+	private function get_unit_string( $product_id ) {
+		$product_type = $this->get_product_type_meta( $product_id );
 		$custom_unit = $this->get_custom_unit_meta( $product_id );
 
-		// If custom unit is set, use it
 		if ( ! empty( $custom_unit ) ) {
-			return '/' . $custom_unit;
+			return $custom_unit;
 		}
 
-        return '';
+		switch ( $product_type ) {
+			case 'area':
+				return __( 'm²', 'woocommerce-area-length-plugin' );
+			case 'length':
+				return __( 'pcs', 'woocommerce-area-length-plugin' );
+			default:
+				return '';
+		}
 	}
 
 	/**
@@ -497,11 +513,45 @@ class WALP_Product_Handler {
 	 */
 	public function modify_stock_status( $availability, $product ) {
 		if ( ! is_admin() && $product->is_in_stock() ) {
-			$stock_quantity = $product->get_stock_quantity();
-			if ( $stock_quantity > 1000 ) {
-				$availability['availability'] = __( '1000+ in stock', 'woocommerce-area-length-plugin' );
+			$product_id = $product->get_id();
+			$product_type = $this->get_product_type_meta( $product_id );
+			$unit = '';
+			if ( $product_type === 'area' ) {
+				$unit = __( 'pkg', 'woocommerce-area-length-plugin' );
+			} else {
+				$unit = $this->get_unit_string( $product_id );
+			}
+			
+			if ( ! empty( $unit ) ) {
+				$stock_quantity = $product->get_stock_quantity();
+				if ( $stock_quantity > 1000 ) {
+					$availability['availability'] = sprintf( __( '1000+ %s in stock', 'woocommerce-area-length-plugin' ), $unit );
+				} else {
+					$availability['availability'] = sprintf( __( '%d %s in stock', 'woocommerce-area-length-plugin' ), $stock_quantity, $unit );
+				}
 			}
 		}
 		return $availability;
+	}
+
+	/**
+	 * Add unit to Omnibus message template for area/length products
+	 */
+	public function add_unit_to_omnibus_message_template( $message, $price, $price_lowest ) {
+		global $product;
+		
+		if ( ! $product ) {
+			return $message;
+		}
+		
+		$product_id = $product->get_id();
+		$unit = '/' . $this->get_unit_string( $product_id );
+		
+		if ( ! empty( $unit ) ) {
+			// Append the unit after the price placeholder (%2$s) in the message template
+			$message = str_replace( '%2$s', '%2$s ' . $unit, $message );
+		}
+		
+		return $message;
 	}
 }
