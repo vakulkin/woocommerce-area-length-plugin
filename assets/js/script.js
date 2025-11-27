@@ -34,7 +34,10 @@ var WALPCalculator = (function () {
             atLeast: 'at least:',
             weHave: 'we have',
             of: 'of',
-            inStock: 'in stock'
+            inStock: 'in stock',
+            squareMeters: 'm²',
+            meters: 'm',
+            pieces: 'pcs'
         }
     };
 
@@ -146,9 +149,9 @@ var WALPCalculator = (function () {
 
             if (boxes > 0) {
                 if (productType === 'area') {
-                    return utils.formatMeasurement(totalCalculated, 'm²');
+                    return utils.formatMeasurement(totalCalculated, config.i18n.squareMeters);
                 } else if (productType === 'length') {
-                    return utils.formatMeasurement(totalCalculated, 'mb');
+                    return utils.formatMeasurement(totalCalculated, config.i18n.meters);
                 }
             }
 

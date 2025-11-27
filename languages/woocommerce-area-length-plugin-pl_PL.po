@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce Area and Length Products 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-area-"
 "length-plugin\n"
-"POT-Creation-Date: 2025-11-24 11:56+0100\n"
+"POT-Creation-Date: 2025-11-27 09:25+0100\n"
 "PO-Revision-Date: 2025-11-24 11:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
@@ -26,11 +26,11 @@ msgstr "opak."
 msgid "%d pcs. in package"
 msgstr "%d szt. w opakowaniu"
 
-#: includes/class-product-handler.php:240
+#: includes/class-product-handler.php:240 woocommerce-area-length-plugin.php:60
 msgid "m²"
 msgstr "m²"
 
-#: includes/class-product-handler.php:242
+#: includes/class-product-handler.php:242 woocommerce-area-length-plugin.php:62
 msgid "pcs"
 msgstr "szt."
 
@@ -71,7 +71,8 @@ msgid ""
 "Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, "
 "default units will be used."
 msgstr ""
-"Wprowadź tekst jednostki niestandardowej (np. \"kg\", \"litry\", \"pudła\"). Jeśli pozostanie puste, zostaną użyte jednostki domyślne."
+"Wprowadź tekst jednostki niestandardowej (np. \"kg\", \"litry\", \"pudła\"). "
+"Jeśli pozostanie puste, zostaną użyte jednostki domyślne."
 
 #: includes/class-product-handler.php:286
 msgid "e.g., kg, liters, boxes"
@@ -168,6 +169,10 @@ msgstr "z"
 #, fuzzy
 msgid "in stock"
 msgstr "%d %s w magazynie"
+
+#: woocommerce-area-length-plugin.php:61
+msgid "m"
+msgstr "mb"
 
 #~ msgid "szt."
 #~ msgstr "szt."

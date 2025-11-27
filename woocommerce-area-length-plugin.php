@@ -56,7 +56,10 @@ function walp_enqueue_scripts()
             'atLeast' => __('at least:', 'woocommerce-area-length-plugin'),
             'weHave' => __('we have', 'woocommerce-area-length-plugin'),
             'of' => __('of', 'woocommerce-area-length-plugin'),
-            'inStock' => __('in stock', 'woocommerce-area-length-plugin')
+            'inStock' => __('in stock', 'woocommerce-area-length-plugin'),
+            'squareMeters' => __('m²', 'woocommerce-area-length-plugin'),
+            'meters' => __('m', 'woocommerce-area-length-plugin'),
+            'pieces' => __('pcs', 'woocommerce-area-length-plugin')
         )
     ));
 }

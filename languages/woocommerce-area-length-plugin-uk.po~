@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce Area and Length Products 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-area-"
 "length-plugin\n"
-"POT-Creation-Date: 2025-11-27 09:25+0100\n"
+"POT-Creation-Date: 2025-11-24 11:56+0100\n"
 "PO-Revision-Date: 2025-11-24 11:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -26,11 +26,11 @@ msgstr "пак."
 msgid "%d pcs. in package"
 msgstr "%d шт. в упаковці"
 
-#: includes/class-product-handler.php:240 woocommerce-area-length-plugin.php:60
+#: includes/class-product-handler.php:240
 msgid "m²"
 msgstr "м²"
 
-#: includes/class-product-handler.php:242 woocommerce-area-length-plugin.php:62
+#: includes/class-product-handler.php:242
 msgid "pcs"
 msgstr "шт."
 
@@ -71,9 +71,7 @@ msgid ""
 "Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, "
 "default units will be used."
 msgstr ""
-"Введіть текст користувацької одиниці (наприклад, \"кг\", \"літри\", "
-"\"коробки\"). Якщо залишити порожнім, будуть використані одиниці за "
-"замовчуванням."
+"Введіть текст користувацької одиниці (наприклад, \"кг\", \"літри\", \"коробки\"). Якщо залишити порожнім, будуть використані одиниці за замовчуванням."
 
 #: includes/class-product-handler.php:286
 msgid "e.g., kg, liters, boxes"
@@ -170,10 +168,6 @@ msgstr "з"
 #, fuzzy
 msgid "in stock"
 msgstr "%d %s на складі"
-
-#: woocommerce-area-length-plugin.php:61
-msgid "m"
-msgstr "п.м."
 
 #~ msgid "szt."
 #~ msgstr "шт."
