@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce Area and Length Products 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-area-"
 "length-plugin\n"
-"POT-Creation-Date: 2025-11-24 11:24+0100\n"
+"POT-Creation-Date: 2025-11-24 11:56+0100\n"
 "PO-Revision-Date: 2025-11-24 11:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -17,145 +17,157 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: includes/class-product-handler.php:94
+#: includes/class-product-handler.php:94 includes/class-product-handler.php:520
 msgid "pkg"
 msgstr "пак."
 
 #: includes/class-product-handler.php:108
 #, php-format
 msgid "%d pcs. in package"
-msgstr ""
+msgstr "%d шт. в упаковці"
 
-#: includes/class-product-handler.php:249
+#: includes/class-product-handler.php:240
 msgid "m²"
 msgstr "м²"
 
-#: includes/class-product-handler.php:251
-msgid "opak."
-msgstr ""
-
-#: includes/class-product-handler.php:258
-#: includes/class-product-handler.php:260
+#: includes/class-product-handler.php:242
 msgid "pcs"
 msgstr "шт."
 
-#: includes/class-product-handler.php:262
-msgid "szt."
-msgstr "шт."
-
-#: includes/class-product-handler.php:280
+#: includes/class-product-handler.php:257
 msgid "Measurement Type"
-msgstr ""
+msgstr "Тип вимірювання"
 
-#: includes/class-product-handler.php:282
+#: includes/class-product-handler.php:259
 msgid "Standard"
-msgstr ""
+msgstr "Стандартний"
+
+#: includes/class-product-handler.php:260
+msgid "Area"
+msgstr "Площа"
+
+#: includes/class-product-handler.php:261
+msgid "Length"
+msgstr "Довжина"
+
+#: includes/class-product-handler.php:264
+msgid "Select the measurement type for this product."
+msgstr "Виберіть тип вимірювання для цього товару."
+
+#: includes/class-product-handler.php:270
+msgid "Meters per package"
+msgstr "Метрів в упаковці"
+
+#: includes/class-product-handler.php:272
+msgid "Enter meters per package for quantity calculations."
+msgstr "Введіть метри в упаковці для розрахунку кількості."
 
 #: includes/class-product-handler.php:283
-msgid "Area"
-msgstr ""
-
-#: includes/class-product-handler.php:284
-msgid "Length"
-msgstr ""
-
-#: includes/class-product-handler.php:287
-msgid "Select the measurement type for this product."
-msgstr ""
-
-#: includes/class-product-handler.php:293
-msgid "Meters per package"
-msgstr ""
-
-#: includes/class-product-handler.php:295
-msgid "Enter meters per package for quantity calculations."
-msgstr ""
-
-#: includes/class-product-handler.php:306
 msgid "Custom Unit"
-msgstr ""
+msgstr "Користувацька одиниця"
 
-#: includes/class-product-handler.php:308
+#: includes/class-product-handler.php:285
 msgid ""
 "Enter custom unit text (e.g., \"kg\", \"liters\", \"boxes\"). If left empty, "
 "default units will be used."
 msgstr ""
+"Введіть текст користувацької одиниці (наприклад, \"кг\", \"літри\", \"коробки\"). Якщо залишити порожнім, будуть використані одиниці за замовчуванням."
 
-#: includes/class-product-handler.php:309
+#: includes/class-product-handler.php:286
 msgid "e.g., kg, liters, boxes"
-msgstr ""
+msgstr "наприклад, кг, літри, коробки"
+
+#: includes/class-product-handler.php:337
+msgid "Room Dimensions"
+msgstr "Розміри приміщення"
+
+#: includes/class-product-handler.php:342
+#: includes/class-product-handler.php:384
+msgid "Length (meters)"
+msgstr "Довжина (метри)"
+
+#: includes/class-product-handler.php:343
+msgid "Width (meters)"
+msgstr "Ширина (метри)"
+
+#: includes/class-product-handler.php:357
+msgid "Safety Margin"
+msgstr "Запас безпеки"
 
 #: includes/class-product-handler.php:360
-msgid "Room Dimensions"
-msgstr ""
-
-#: includes/class-product-handler.php:365
-#: includes/class-product-handler.php:407
-msgid "Length (meters)"
-msgstr ""
-
-#: includes/class-product-handler.php:366
-msgid "Width (meters)"
-msgstr ""
-
-#: includes/class-product-handler.php:380
-msgid "Safety Margin"
-msgstr ""
-
-#: includes/class-product-handler.php:383
 msgid "0% (No margin)"
-msgstr ""
+msgstr "0% (Без запасу)"
 
-#: includes/class-product-handler.php:384
+#: includes/class-product-handler.php:361
 msgid "5% (Minimal)"
-msgstr ""
+msgstr "5% (Мінімальний)"
+
+#: includes/class-product-handler.php:362
+msgid "10% (Standard)"
+msgstr "10% (Стандартний)"
+
+#: includes/class-product-handler.php:377
+msgid "Required Quantity"
+msgstr "Необхідна кількість"
+
+#: includes/class-product-handler.php:381
+msgid "Total Area (m²)"
+msgstr "Загальна площа (м²)"
+
+#: includes/class-product-handler.php:382
+msgid "Packages Needed"
+msgstr "Потрібно упаковок"
 
 #: includes/class-product-handler.php:385
-msgid "10% (Standard)"
-msgstr ""
+msgid "Pieces Needed"
+msgstr "Потрібно штук"
+
+#: includes/class-product-handler.php:397
+msgid "Summary"
+msgstr "Підсумок"
 
 #: includes/class-product-handler.php:400
-msgid "Required Quantity"
-msgstr ""
+msgid "Total:"
+msgstr "Загалом:"
+
+#: includes/class-product-handler.php:401
+msgid "Packages:"
+msgstr "Упаковки:"
+
+#: includes/class-product-handler.php:401
+msgid "Pieces:"
+msgstr "Штуки:"
 
 #: includes/class-product-handler.php:404
-msgid "Total Area (m²)"
-msgstr ""
-
-#: includes/class-product-handler.php:405
-msgid "Packages Needed"
-msgstr ""
-
-#: includes/class-product-handler.php:408
-msgid "Pieces Needed"
-msgstr ""
-
-#: includes/class-product-handler.php:420
-msgid "Summary"
-msgstr ""
-
-#: includes/class-product-handler.php:423
-msgid "Total:"
-msgstr ""
-
-#: includes/class-product-handler.php:424
-msgid "Packages:"
-msgstr ""
-
-#: includes/class-product-handler.php:424
-msgid "Pieces:"
-msgstr ""
-
-#: includes/class-product-handler.php:427
 msgid "Final Price:"
-msgstr ""
+msgstr "Кінцева ціна:"
 
-#: includes/class-product-handler.php:545
+#: includes/class-product-handler.php:528
 #, php-format
 msgid "1000+ %s in stock"
 msgstr "1000+ %s на складі"
 
-#: includes/class-product-handler.php:547
+#: includes/class-product-handler.php:530
 #, php-format
 msgid "%d %s in stock"
 msgstr "%d %s на складі"
+
+#: woocommerce-area-length-plugin.php:56
+msgid "at least:"
+msgstr "принаймні:"
+
+#: woocommerce-area-length-plugin.php:57
+msgid "we have"
+msgstr "у нас є"
+
+#: woocommerce-area-length-plugin.php:58
+msgid "of"
+msgstr "з"
+
+#: woocommerce-area-length-plugin.php:59
+#, fuzzy
+msgid "in stock"
+msgstr "%d %s на складі"
+
+#~ msgid "szt."
+#~ msgstr "шт."
