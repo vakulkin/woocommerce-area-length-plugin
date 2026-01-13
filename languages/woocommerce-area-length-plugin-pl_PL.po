@@ -26,6 +26,11 @@ msgstr "opak."
 msgid "%d pcs. in package"
 msgstr "%d szt. w opakowaniu"
 
+#: includes/class-product-handler.php:117
+#, php-format
+msgid "%d sheets in package"
+msgstr "%d arkuszy w opakowaniu"
+
 #: includes/class-product-handler.php:240 woocommerce-area-length-plugin.php:60
 msgid "m²"
 msgstr "m²"
@@ -33,6 +38,10 @@ msgstr "m²"
 #: includes/class-product-handler.php:242 woocommerce-area-length-plugin.php:62
 msgid "pcs"
 msgstr "szt."
+
+#: includes/class-product-handler.php:266
+msgid "arkusz"
+msgstr "arkusz"
 
 #: includes/class-product-handler.php:257
 msgid "Measurement Type"
@@ -139,6 +148,10 @@ msgstr "Potrzebne opakowania"
 msgid "Pieces Needed"
 msgstr "Potrzebne sztuki"
 
+#: includes/class-product-handler.php:438
+msgid "Sheets Needed"
+msgstr "Potrzebne arkusze"
+
 #: includes/class-product-handler.php:397
 msgid "Summary"
 msgstr "Podsumowanie"
@@ -155,6 +168,10 @@ msgstr "Opakowania:"
 msgid "Pieces:"
 msgstr "Sztuki:"
 
+#: includes/class-product-handler.php:461
+msgid "Sheets:"
+msgstr "Arkusze:"
+
 #: includes/class-product-handler.php:404
 msgid "Final Price:"
 msgstr "Cena końcowa:"
@@ -169,6 +186,14 @@ msgstr "1000+ %s w magazynie"
 msgid "%d %s in stock"
 msgstr "%d %s w magazynie"
 
+#: includes/class-product-handler.php:597
+#, php-format
+msgid "%d arkusz in stock"
+msgid_plural "%d arkuszy in stock"
+msgstr[0] "%d arkusz w magazynie"
+msgstr[1] "%d arkusze w magazynie"
+msgstr[2] "%d arkuszy w magazynie"
+
 #: woocommerce-area-length-plugin.php:56
 msgid "at least:"
 msgstr "przynajmniej:"
@@ -182,9 +207,8 @@ msgid "of"
 msgstr "z"
 
 #: woocommerce-area-length-plugin.php:59
-#, fuzzy
 msgid "in stock"
-msgstr "%d %s w magazynie"
+msgstr "w magazynie"
 
 #: woocommerce-area-length-plugin.php:61
 msgid "m"

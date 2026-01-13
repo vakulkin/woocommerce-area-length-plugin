@@ -26,6 +26,11 @@ msgstr "пак."
 msgid "%d pcs. in package"
 msgstr "%d шт. в упаковці"
 
+#: includes/class-product-handler.php:117
+#, php-format
+msgid "%d sheets in package"
+msgstr "%d аркушів в упаковці"
+
 #: includes/class-product-handler.php:240 woocommerce-area-length-plugin.php:60
 msgid "m²"
 msgstr "м²"
@@ -33,6 +38,10 @@ msgstr "м²"
 #: includes/class-product-handler.php:242 woocommerce-area-length-plugin.php:62
 msgid "pcs"
 msgstr "шт."
+
+#: includes/class-product-handler.php:266
+msgid "arkusz"
+msgstr "аркуш"
 
 #: includes/class-product-handler.php:257
 msgid "Measurement Type"
@@ -140,6 +149,10 @@ msgstr "Потрібно упаковок"
 msgid "Pieces Needed"
 msgstr "Потрібно штук"
 
+#: includes/class-product-handler.php:438
+msgid "Sheets Needed"
+msgstr "Потрібно аркушів"
+
 #: includes/class-product-handler.php:397
 msgid "Summary"
 msgstr "Підсумок"
@@ -156,6 +169,10 @@ msgstr "Упаковки:"
 msgid "Pieces:"
 msgstr "Штуки:"
 
+#: includes/class-product-handler.php:461
+msgid "Sheets:"
+msgstr "Аркуші:"
+
 #: includes/class-product-handler.php:404
 msgid "Final Price:"
 msgstr "Кінцева ціна:"
@@ -170,6 +187,14 @@ msgstr "1000+ %s на складі"
 msgid "%d %s in stock"
 msgstr "%d %s на складі"
 
+#: includes/class-product-handler.php:597
+#, php-format
+msgid "%d arkusz in stock"
+msgid_plural "%d arkuszy in stock"
+msgstr[0] "%d аркуш на складі"
+msgstr[1] "%d аркуші на складі"
+msgstr[2] "%d аркушів на складі"
+
 #: woocommerce-area-length-plugin.php:56
 msgid "at least:"
 msgstr "принаймні:"
@@ -183,9 +208,8 @@ msgid "of"
 msgstr "з"
 
 #: woocommerce-area-length-plugin.php:59
-#, fuzzy
 msgid "in stock"
-msgstr "%d %s на складі"
+msgstr "на складі"
 
 #: woocommerce-area-length-plugin.php:61
 msgid "m"

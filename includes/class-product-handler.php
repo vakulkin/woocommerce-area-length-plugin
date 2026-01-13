@@ -112,7 +112,12 @@ class WALP_Product_Handler
 
         if ($quantity_in_box) {
             $html .= '<div class="walp-quantity-info">';
-            $html .= sprintf(__('%d pcs. in package', 'woocommerce-area-length-plugin'), $quantity_in_box);
+            $product_type = $this->get_product_type_meta($product_id);
+            if ($product_type === 'mozaik') {
+                $html .= sprintf(__('%d sheets in package', 'woocommerce-area-length-plugin'), $quantity_in_box);
+            } else {
+                $html .= sprintf(__('%d pcs. in package', 'woocommerce-area-length-plugin'), $quantity_in_box);
+            }
             $html .= '</div>';
         }
 
@@ -160,7 +165,7 @@ class WALP_Product_Handler
             return $this->generate_standard_price_html($price, $regular_price, $price_suffix, $currency_settings);
         }
 
-        if ($product_type === 'area') {
+        if ($product_type === 'area' || $product_type === 'mozaik') {
             $price_per_m2 = $product->get_price() / $meters_per_box;
             $quantity_in_box = $this->get_quantity_in_box($product);
 
@@ -170,10 +175,6 @@ class WALP_Product_Handler
         }
 
         if ($product_type === 'length') {
-            return $this->generate_length_price_html($product->get_price(), $currency_settings, $regular_price, $product_id);
-        }
-
-        if ($product_type === 'mozaik') {
             return $this->generate_length_price_html($product->get_price(), $currency_settings, $regular_price, $product_id);
         }
 
@@ -262,7 +263,7 @@ class WALP_Product_Handler
             case 'length':
                 return __('pcs', 'woocommerce-area-length-plugin');
             case 'mozaik':
-                return __('pcs', 'woocommerce-area-length-plugin');
+                return __('arkusz', 'woocommerce-area-length-plugin');
             default:
                 return '';
         }
@@ -379,19 +380,23 @@ class WALP_Product_Handler
     }
 
     /**
-     * Render mosaic input section
+     * Render mosaic dimensions section (same as area)
      */
-    private function render_mozaik_section()
+    private function render_mozaik_dimensions_section()
     {
-        echo '<div class="walp-section">';
-        echo '<h4 class="walp-section-title">' . __('Mosaic Calculator', 'woocommerce-area-length-plugin') . '</h4>';
+        echo '<div class="walp-section walp-section-collapsible">';
+        echo '<h4 class="walp-section-title walp-section-header">' . __('Mosaic Calculator', 'woocommerce-area-length-plugin') . '<span class="walp-toggle-arrow"></span></h4>';
+        echo '<div class="walp-section-content">';
+
         echo '<div class="walp-row">';
 
-        $this->render_input_field('walp_mozaik_qty', __('Quantity (pcs)', 'woocommerce-area-length-plugin'));
-        $this->render_input_field('walp_mozaik_area', __('Area (m²)', 'woocommerce-area-length-plugin'));
+        $this->render_input_field('walp_length', __('Length (meters)', 'woocommerce-area-length-plugin'));
+        $this->render_input_field('walp_width', __('Width (meters)', 'woocommerce-area-length-plugin'));
+
         $this->render_safety_margin_dropdown();
 
         echo '</div>'; // .walp-row
+        echo '</div>'; // .walp-section-content
         echo '</div>'; // .walp-section
     }
 
@@ -429,7 +434,8 @@ class WALP_Product_Handler
             $this->render_input_field('walp_calculated_value', __('Total Area (m²)', 'woocommerce-area-length-plugin'));
             $this->render_input_field('walp_calculated_qty', __('Packages Needed', 'woocommerce-area-length-plugin'), true);
         } elseif ($product_type === 'mozaik') {
-            $this->render_input_field('walp_calculated_qty', __('Pieces Needed', 'woocommerce-area-length-plugin'), true);
+            $this->render_input_field('walp_calculated_value', __('Total Area (m²)', 'woocommerce-area-length-plugin'));
+            $this->render_input_field('walp_calculated_qty', __('Sheets Needed', 'woocommerce-area-length-plugin'), true);
         } else {
             $this->render_input_field('walp_calculated_value', __('Length (meters)', 'woocommerce-area-length-plugin'));
             $this->render_input_field('walp_calculated_qty', __('Pieces Needed', 'woocommerce-area-length-plugin'), true);
@@ -449,7 +455,13 @@ class WALP_Product_Handler
         echo '<div class="walp-stats">';
 
         $this->render_stat(__('Total:', 'woocommerce-area-length-plugin'), 'walp_total_value');
-        $boxes_label = $product_type === 'area' ? __('Packages:', 'woocommerce-area-length-plugin') : __('Pieces:', 'woocommerce-area-length-plugin');
+        if ($product_type === 'area') {
+            $boxes_label = __('Packages:', 'woocommerce-area-length-plugin');
+        } elseif ($product_type === 'mozaik') {
+            $boxes_label = __('Sheets:', 'woocommerce-area-length-plugin');
+        } else {
+            $boxes_label = __('Pieces:', 'woocommerce-area-length-plugin');
+        }
         $this->render_stat($boxes_label, 'walp_boxes_needed');
 
         $this->render_stat(__('Final Price:', 'woocommerce-area-length-plugin'), 'walp_final_price');
@@ -469,20 +481,15 @@ class WALP_Product_Handler
         if (($product_type === 'area' || $product_type === 'length' || $product_type === 'mozaik') && $meters_per_box > 0) {
             echo '<div class="walp-input-fields">';
 
-            // Dimensions input section (only for area)
+            // Dimensions input section (for area and mozaik)
             if ($product_type === 'area') {
                 $this->render_area_dimensions_section();
+            } elseif ($product_type === 'mozaik') {
+                $this->render_mozaik_dimensions_section();
             }
 
-            // Mosaic input section (only for mozaik)
-            if ($product_type === 'mozaik') {
-                $this->render_mozaik_section();
-            }
-
-            // Calculated fields section
-            if ($product_type !== 'mozaik') {
-                $this->render_calculated_fields_section($product_type);
-            }
+            // Calculated fields section (for all types)
+            $this->render_calculated_fields_section($product_type);
 
             // Summary section
             $this->render_summary_section($product_type);
@@ -592,7 +599,15 @@ class WALP_Product_Handler
                 if ($stock_quantity > 1000) {
                     $availability['availability'] = sprintf(__('1000+ %s in stock', 'woocommerce-area-length-plugin'), $unit);
                 } else {
-                    $availability['availability'] = sprintf(__('%d %s in stock', 'woocommerce-area-length-plugin'), $stock_quantity, $unit);
+                    // Use proper unit with pluralization for specific units
+                    if ($unit === 'arkusz') {
+                        $availability['availability'] = sprintf(
+                            _n('%d arkusz in stock', '%d arkuszy in stock', $stock_quantity, 'woocommerce-area-length-plugin'),
+                            $stock_quantity
+                        );
+                    } else {
+                        $availability['availability'] = sprintf(__('%d %s in stock', 'woocommerce-area-length-plugin'), $stock_quantity, $unit);
+                    }
                 }
             }
         }
