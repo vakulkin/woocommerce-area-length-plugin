@@ -298,7 +298,7 @@ class WALP_Product_Handler
             'description' => __('Enter meters per package for quantity calculations.', 'woocommerce-area-length-plugin'),
             'type' => 'number',
             'custom_attributes' => array(
-                'step' => '0.01',
+                'step' => '0.001',
                 'min' => '0'
             )
         ));
