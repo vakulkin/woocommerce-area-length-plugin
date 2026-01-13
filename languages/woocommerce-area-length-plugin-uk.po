@@ -50,6 +50,10 @@ msgstr "Площа"
 msgid "Length"
 msgstr "Довжина"
 
+#: includes/class-product-handler.php:262
+msgid "Mosaic"
+msgstr "Мозаїка"
+
 #: includes/class-product-handler.php:264
 msgid "Select the measurement type for this product."
 msgstr "Виберіть тип вимірювання для цього товару."
@@ -91,6 +95,18 @@ msgstr "Довжина (метри)"
 #: includes/class-product-handler.php:343
 msgid "Width (meters)"
 msgstr "Ширина (метри)"
+
+#: includes/class-product-handler.php:352
+msgid "Mosaic Calculator"
+msgstr "Калькулятор мозаїки"
+
+#: includes/class-product-handler.php:355
+msgid "Quantity (pcs)"
+msgstr "Кількість (шт.)"
+
+#: includes/class-product-handler.php:356
+msgid "Area (m²)"
+msgstr "Площа (м²)"
 
 #: includes/class-product-handler.php:357
 msgid "Safety Margin"
