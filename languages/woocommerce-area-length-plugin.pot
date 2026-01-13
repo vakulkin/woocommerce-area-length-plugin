@@ -51,12 +51,12 @@ msgstr ""
 msgid "Length"
 msgstr ""
 
-#: includes/class-product-handler.php:262
-msgid "Mosaic"
-msgstr ""
-
 #: includes/class-product-handler.php:264
 msgid "Select the measurement type for this product."
+msgstr ""
+
+#: includes/class-product-handler.php:286
+msgid "Mosaic"
 msgstr ""
 
 #: includes/class-product-handler.php:270
@@ -94,20 +94,20 @@ msgstr ""
 msgid "Width (meters)"
 msgstr ""
 
-#: includes/class-product-handler.php:352
+#: includes/class-product-handler.php:357
+msgid "Safety Margin"
+msgstr ""
+
+#: includes/class-product-handler.php:387
 msgid "Mosaic Calculator"
 msgstr ""
 
-#: includes/class-product-handler.php:355
+#: includes/class-product-handler.php:390
 msgid "Quantity (pcs)"
 msgstr ""
 
-#: includes/class-product-handler.php:356
+#: includes/class-product-handler.php:391
 msgid "Area (m²)"
-msgstr ""
-
-#: includes/class-product-handler.php:357
-msgid "Safety Margin"
 msgstr ""
 
 #: includes/class-product-handler.php:360

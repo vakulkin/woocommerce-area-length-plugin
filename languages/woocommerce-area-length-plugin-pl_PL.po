@@ -50,13 +50,13 @@ msgstr "Powierzchnia"
 msgid "Length"
 msgstr "Długość"
 
-#: includes/class-product-handler.php:262
-msgid "Mosaic"
-msgstr "Mozaika"
-
 #: includes/class-product-handler.php:264
 msgid "Select the measurement type for this product."
 msgstr "Wybierz typ pomiaru dla tego produktu."
+
+#: includes/class-product-handler.php:286
+msgid "Mosaic"
+msgstr "Mozaika"
 
 #: includes/class-product-handler.php:270
 msgid "Meters per package"
@@ -95,21 +95,21 @@ msgstr "Długość (metry)"
 msgid "Width (meters)"
 msgstr "Szerokość (metry)"
 
-#: includes/class-product-handler.php:352
-msgid "Mosaic Calculator"
-msgstr "Kalkulator mozaiki"
-
-#: includes/class-product-handler.php:355
-msgid "Quantity (pcs)"
-msgstr "Ilość (szt.)"
-
-#: includes/class-product-handler.php:356
-msgid "Area (m²)"
-msgstr "Powierzchnia (m²)"
-
 #: includes/class-product-handler.php:357
 msgid "Safety Margin"
 msgstr "Margines bezpieczeństwa"
+
+#: includes/class-product-handler.php:387
+msgid "Mosaic Calculator"
+msgstr "Kalkulator mozaiki"
+
+#: includes/class-product-handler.php:390
+msgid "Quantity (pcs)"
+msgstr "Ilość (szt.)"
+
+#: includes/class-product-handler.php:391
+msgid "Area (m²)"
+msgstr "Powierzchnia (m²)"
 
 #: includes/class-product-handler.php:360
 msgid "0% (No margin)"
