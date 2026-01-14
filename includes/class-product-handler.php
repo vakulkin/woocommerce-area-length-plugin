@@ -165,7 +165,7 @@ class WALP_Product_Handler
             return $this->generate_standard_price_html($price, $regular_price, $price_suffix, $currency_settings);
         }
 
-        if ($product_type === 'area' || $product_type === 'mozaik') {
+        if ($product_type === 'area') {
             $price_per_m2 = $product->get_price() / $meters_per_box;
             $quantity_in_box = $this->get_quantity_in_box($product);
 
@@ -174,7 +174,7 @@ class WALP_Product_Handler
             return $this->generate_area_price_html($price_per_m2, $price, $quantity_in_box, $currency_settings, $product_id, $regular_price_per_m2, $regular_price);
         }
 
-        if ($product_type === 'length') {
+        if ($product_type === 'length' || $product_type === 'mozaik') {
             return $this->generate_length_price_html($product->get_price(), $currency_settings, $regular_price, $product_id);
         }
 
@@ -435,7 +435,7 @@ class WALP_Product_Handler
             $this->render_input_field('walp_calculated_qty', __('Packages Needed', 'woocommerce-area-length-plugin'), true);
         } elseif ($product_type === 'mozaik') {
             $this->render_input_field('walp_calculated_value', __('Total Area (m²)', 'woocommerce-area-length-plugin'));
-            $this->render_input_field('walp_calculated_qty', __('Sheets Needed', 'woocommerce-area-length-plugin'), true);
+            $this->render_input_field('walp_calculated_qty', __('Pieces Needed', 'woocommerce-area-length-plugin'), true);
         } else {
             $this->render_input_field('walp_calculated_value', __('Length (meters)', 'woocommerce-area-length-plugin'));
             $this->render_input_field('walp_calculated_qty', __('Pieces Needed', 'woocommerce-area-length-plugin'), true);
