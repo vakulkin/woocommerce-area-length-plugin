@@ -457,8 +457,6 @@ class WALP_Product_Handler
         $this->render_stat(__('Total:', 'woocommerce-area-length-plugin'), 'walp_total_value');
         if ($product_type === 'area') {
             $boxes_label = __('Packages:', 'woocommerce-area-length-plugin');
-        } elseif ($product_type === 'mozaik') {
-            $boxes_label = __('Sheets:', 'woocommerce-area-length-plugin');
         } else {
             $boxes_label = __('Pieces:', 'woocommerce-area-length-plugin');
         }
